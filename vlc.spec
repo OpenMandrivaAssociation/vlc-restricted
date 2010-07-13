@@ -1,20 +1,20 @@
 %define name 		vlc
 %define version 1.1.0
-%define cvs		0
+%define snapshot	0
 %define pre		0
-%define rel 2
+%define rel 1
 %if %pre
 %define release		%mkrel -c %pre 1
-%elsif %cvs
-%define release %mkrel -c %cvs %rel
+%elsif %snapshot
+%define release %mkrel -c %snapshot %rel
 %else
-%define release %mkrel 0.30000000.%rel
+%define release %mkrel %rel
 %endif
 
 %define	libmajor	5
 %define coremajor	4
-%if %cvs
-%define fname %name-snapshot-%cvs
+%if %snapshot
+%define fname %name-snapshot-%snapshot
 %elsif %pre
 %define fname %name-%version-%pre
 %else
@@ -46,6 +46,9 @@
 %define with_zvbi 1
 %define with_kate 1
 %define with_kde 1
+%define with_goom 1
+%define with_projectm 1
+%define with_ass 1
 %define with_lua 1
 
 %ifarch %{ix86}
@@ -250,7 +253,7 @@ Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
-%if %cvs
+%if %snapshot
 Source0:	http://nightlies.videolan.org/build/source/%fname.tar.bz2
 %else
 Source0:	http://download.videolan.org/pub/videolan/%name/%{version}/%{fname}.tar.bz2
@@ -268,12 +271,7 @@ Patch19: 0001-pulse-Use-the-user-agent-variable-for-the-client-nam.patch
 License:	GPLv2+
 Group:		Video
 URL:		http://www.videolan.org/
-# vlc-mad needed by ffmpeg builtin (i want MPEG4 support out of box)
-Suggests:	vlc-plugin-mad
-# DVD working out of box.
-Suggests:	vlc-plugin-a52
 # might be useful too:
-Suggests:	vlc-plugin-ogg
 Suggests:	vlc-plugin-theora
 %if %with_pulse
 # needed when using pulseaudio
@@ -335,6 +333,8 @@ BuildRequires:  libmad-devel
 %if %with_ogg
 Buildrequires:	libvorbis-devel
 Buildrequires:	libogg-devel
+Provides: vlc-plugin-ogg
+Obsoletes: vlc-plugin-ogg
 %endif
 BuildRequires: xpm-devel
 BuildRequires: libxcb-util-devel
@@ -350,9 +350,14 @@ Buildrequires:	libmatroska-devel >= 0.8.0
 %endif
 %if %with_dvdnav
 Buildrequires:	libdvdnav-devel >= 0.1.9
+Provides: vlc-plugin-dvdnav
+Obsoletes: vlc-plugin-dvdnav
 %endif
 %if %with_a52
 Buildrequires:	liba52dec-devel
+Provides:	vlc-plugin-a52
+Obsoletes: vlc-plugin-a52
+
 %endif
 %if %with_vcd
 BuildRequires: libvcd-devel >= 0.7.21
@@ -411,7 +416,6 @@ BuildRequires: autoconf2.5
 BuildRequires: gettext-devel
 BuildRequires: automake >= 1.10
 BuildRequires: libtool
-BuildRequires: cvs
 %if %with_dts
 BuildRequires:  libdca-devel
 %endif
@@ -438,6 +442,8 @@ BuildRequires: librsvg-devel
 BuildRequires: libcaca-devel
 %if %with_kde
 BuildRequires: kdelibs4-core
+%endif
+%if %with_projectm
 %endif
 BuildRequires: desktop-file-utils
 Provides: wxvlc
@@ -486,15 +492,6 @@ Development files for the VLC media player
 This package contains headers and a static library required to build plugins
 for the VLC media player, or standalone applications using features from VLC.
 
-%if %with_kde
-%package kde
-Summary: KDE Integration for VLC
-group: Video
-Requires: %name = %version
-%description kde
-Various metadata to aid integration with KDE.
-%endif
-
 %package -n mozilla-plugin-vlc
 Summary: Multimedia plugin for Mozilla, based on vlc
 group: Video
@@ -534,6 +531,17 @@ BuildRequires: libtiger-devel
 %description plugin-kate
 This package adds support for subtitles and Karaoke text display based on
 the libkate library to VLC.
+%endif
+
+%if %with_ass
+%package plugin-libass
+Summary: Add subtitle support to VLC using libass
+Group: Video
+Requires: %name = %version
+BuildRequires: libass-devel
+
+%description plugin-libass
+This package adds support for subtitles based on the libass library to VLC.
 %endif
 
 %if %with_lua
@@ -684,14 +692,25 @@ it, use the `--extraintf xosd' flag or select the `xosd' interface plugin
 from the preferences menu.
 %endif
 
-
-%package plugin-ogg
-Summary: Ogg demuxer and Vorbis codec plugin for the VLC media player
+%if %with_goom
+%package plugin-goom
+Summary: Visualization plugin for the VLC media player
 Group: Video
+BuildRequires: libgoom2-devel
 Requires: %{name} = %{version}
-%description plugin-ogg
-These plugins add support for the Ogg bitstream format and the Ogg Vorbis
-compressed audio format to the VLC media player. They are autodetected.
+%description plugin-goom
+This is a visualization plugin for VLC media player based on the Goom library.
+%endif
+
+%if %with_projectm
+%package plugin-projectm
+Summary: Visualization plugin for the VLC media player
+Group: Video
+BuildRequires: libprojectm-devel
+Requires: %{name} = %{version}
+%description plugin-projectm
+This is a visualization plugin for VLC media player based on projectm.
+%endif
 
 %if %with_theora
 %package plugin-theora
@@ -757,14 +776,6 @@ Requires: %{name} = %{version}
 %description plugin-flac
 These plugins add support for the FLAC compressed audio format to the
 VLC media player.
-
-%package plugin-a52
-Summary: A-52 (AC-3) codec plugin for the VLC media player
-Group: Video
-Requires: %{name} = %{version}
-%description plugin-a52
-This plugin adds support for the ATSC A-52 (aka. AC-3) audio format to
-the VLC media player. The plugin is autodetected.
 
 %if %with_dv
 %package plugin-dv
@@ -854,15 +865,6 @@ Requires: %{name} = %{version}
 %description plugin-gnutls
 This plugin adds support for SSL/TLS to the VLC media player.
 
-
-%package plugin-dvdnav
-Summary: DVD plugin with menu support for the VLC media player
-Group: Video
-Requires: %{name} = %{version}
-%description plugin-dvdnav
-This plugin adds support for the DVD including naviation menus to
-the VLC media player.
-
 %package plugin-libnotify
 Summary: Notification popup plugin for the VLC media player
 Group: Video
@@ -873,7 +875,7 @@ the VLC media player.
 
 
 %prep
-%if %cvs
+%if %snapshot
 %setup -q -n %name
 %else
 %setup -q -n %fname
@@ -888,7 +890,7 @@ perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/share/f
 %else
 perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/X11R6/lib/X11/fonts/TTF/VeraBd.ttf^" modules/misc/freetype.c
 %endif
-rm -rf doc/skins/curve_maker/CVS
+rm -rf doc/skins/curve_maker/SNAPSHOT
 #%patch14 -p1 -b .alsabuffer
 %patch16 -p1
 #patch17 -p1
@@ -896,7 +898,7 @@ rm -rf doc/skins/curve_maker/CVS
 %patch18 -p1
 %endif
 %patch19 -p1
-%if %cvs
+%if %snapshot
 ./bootstrap
 %endif
 %if %mdvver <= 200900
@@ -1168,6 +1170,9 @@ rm -fr %buildroot
 %_libdir/vlc/plugins/access/libaccess_attachment_plugin.so
 %_libdir/vlc/plugins/access/libaccess_avio_plugin.so
 %_libdir/vlc/plugins/access/libaccess_bd_plugin.so
+%if %with_dvdnav
+%_libdir/vlc/plugins/access/libdvdnav_plugin.so*
+%endif
 %_libdir/vlc/plugins/access/libaccess_gnomevfs_plugin.so
 %_libdir/vlc/plugins/access/libaccess_imem_plugin.so
 %_libdir/vlc/plugins/access/libaccess_mmap_plugin.so
@@ -1252,7 +1257,11 @@ rm -fr %buildroot
 %_libdir/vlc/plugins/audio_output/libportaudio_plugin.so*
 
 %dir %_libdir/vlc/plugins/codec
+%if %with_a52
 %_libdir/vlc/plugins/codec/liba52_plugin.so*
+%_libdir/vlc/plugins/audio_filter/liba52tofloat32_plugin.so*
+%_libdir/vlc/plugins/audio_filter/liba52tospdif_plugin.so*
+%endif
 %_libdir/vlc/plugins/codec/libadpcm_plugin.so*
 %_libdir/vlc/plugins/codec/libaes3_plugin.so
 %_libdir/vlc/plugins/codec/libaraw_plugin.so*
@@ -1340,7 +1349,10 @@ rm -fr %buildroot
 %_libdir/vlc/plugins/demux/libts_plugin.so*
 %endif
 %_libdir/vlc/plugins/demux/libxa_plugin.so*
-
+%if %with_ogg
+%_libdir/vlc/plugins/demux/libogg_plugin.so*
+%_libdir/vlc/plugins/codec/libvorbis_plugin.so*
+%endif
 %if %with_satellite
 %_libdir/vlc/plugins/access/libsatellite_plugin.so*
 %endif
@@ -1534,6 +1546,9 @@ rm -fr %buildroot
 %_iconsdir/vlc.png
 %_liconsdir/vlc.png
 %_iconsdir/hicolor/*/apps/*
+%if %with_kde
+%_datadir/apps/solid/actions/*.desktop
+%endif
 
 %files -n %libname
 %defattr(-,root,root)
@@ -1550,13 +1565,6 @@ rm -fr %buildroot
 %attr(644,root,root) %_libdir/*.la
 %_mandir/man1/vlc-config*
 %_libdir/pkgconfig/*
-
-%if %with_kde
-%files kde
-%defattr(-,root,root)
-%doc README
-%_datadir/apps/solid/actions/*.desktop
-%endif
 
 %if %with_shout
 %files plugin-shout
@@ -1607,6 +1615,13 @@ rm -fr %buildroot
 %defattr(-,root,root)
 %doc README
 %_libdir/vlc/plugins/codec/libkate_plugin.so
+%endif
+
+%if %with_ass
+%files plugin-libass
+%defattr(-,root,root)
+%doc README
+%_libdir/vlc/plugins/codec/liblibass_plugin.so
 %endif
 
 %if %with_lua
@@ -1678,12 +1693,18 @@ rm -fr %buildroot
 %_libdir/vlc/plugins/misc/libxosd_plugin.so*
 %endif
 
-%if %with_ogg
-%files plugin-ogg
+%if %with_goom
+%files plugin-goom
 %defattr(-,root,root)
 %doc README
-%_libdir/vlc/plugins/demux/libogg_plugin.so*
-%_libdir/vlc/plugins/codec/libvorbis_plugin.so*
+%_libdir/vlc/plugins/visualization/libgoom_plugin.so
+%endif
+
+%if %with_projectm
+%files plugin-projectm
+%defattr(-,root,root)
+%doc README
+%_libdir/vlc/plugins/visualization/libprojectm_plugin.so
 %endif
 
 %if %with_theora
@@ -1737,15 +1758,6 @@ rm -fr %buildroot
 %_libdir/vlc/plugins/access/libdc1394_plugin.so
 %endif
 
-%if %with_a52
-%files plugin-a52
-%defattr(-,root,root)
-%doc README
-%_libdir/vlc/plugins/audio_filter/liba52tofloat32_plugin.so*
-%_libdir/vlc/plugins/audio_filter/liba52tospdif_plugin.so*
-%endif
-
-
 %if %with_mod
 %files plugin-mod
 %defattr(-,root,root)
@@ -1796,13 +1808,6 @@ rm -fr %buildroot
 %defattr(-,root,root)
 %doc README
 %_libdir/vlc/plugins/misc/libgnutls_plugin.so*
-%endif
-
-%if %with_dvdnav
-%files plugin-dvdnav
-%defattr(-,root,root)
-%doc README
-%_libdir/vlc/plugins/access/libdvdnav_plugin.so*
 %endif
 
 %files plugin-libnotify
