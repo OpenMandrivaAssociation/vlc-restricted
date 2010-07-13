@@ -631,7 +631,7 @@ plugin from the preferences menu.
 %endif
 
 %if %with_sdl
-%package plugin-sdl
+%package plugin-sdl5B
 Summary: Simple DirectMedia Layer video plugin for the VLC media player
 Group: Video
 Requires: %{name} = %{version}
@@ -640,6 +640,7 @@ Provides: vlc-sdl
 %if %with_sdl_image
 Buildrequires:	SDL_image-devel >= 1.2.10
 %endif
+BuildRequires: libSDL-devel >= 1.2.10
 Buildrequires:	nas-devel
 
 %description plugin-sdl
