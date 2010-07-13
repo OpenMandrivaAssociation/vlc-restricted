@@ -259,7 +259,6 @@ Source0:	http://download.videolan.org/pub/videolan/%name/%{version}/%{fname}.tar
 Patch13: vlc-1.1.0-pulseprio.patch
 # (cg) 0.8.6e-2mdv Fix buffering in alsa where people use it over pulseaudio
 Patch14: vlc-0.8.6e-alsa-buffer.patch
-Patch15: vlc-1.0.0-oldpulse.patch
 #gw patches from Debian:
 #use absolute paths for OSD menu config
 Patch16: 200_osdmenu_paths.diff
@@ -896,11 +895,6 @@ rm -rf doc/skins/curve_maker/CVS
 %patch13 -p1 -b .pulseprio
 %endif
 #%patch14 -p1 -b .alsabuffer
-# (gg) this is an hack to allow vlc supporting pulseaudio in older
-# distro, like vlc 0.9.8a; pulseaudio newer than 0.9.11
-# (which is adviced) supports the flag: PA_STREAM_ADJUST_LATENCY,
-# older pulseaudio versions don't.
-#patch15 -p1 -b .oldpulse
 %patch16 -p1
 #patch17 -p1
 %if %mdvver >= 201000
