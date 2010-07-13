@@ -890,7 +890,6 @@ perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/share/f
 %else
 perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/X11R6/lib/X11/fonts/TTF/VeraBd.ttf^" modules/misc/freetype.c
 %endif
-rm -rf doc/skins/curve_maker/SNAPSHOT
 #%patch14 -p1 -b .alsabuffer
 %patch16 -p1
 #patch17 -p1
