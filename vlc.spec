@@ -50,6 +50,7 @@
 %define with_projectm 1
 %define with_ass 1
 %define with_lua 1
+%define with_taglib 1
 
 %ifarch %{ix86}
 %define with_loader 1
@@ -226,6 +227,10 @@
 %{?_with_mod:		%{expand: %%global with_mod 1}}
 %{?_with_gnutls:		%{expand: %%global with_gnutls 1}}
 
+%if %mdvver < 201010
+%define with_taglib 0
+%endif
+
 %if %mdvver < 201000
 %define with_schroedinger 0
 %define with_udev 0
@@ -324,7 +329,10 @@ Obsoletes: kvlc
 Buildrequires:	qt4-devel
 %endif
 BuildRequires: libmesaglu-devel
-BuildRequires: taglib-devel
+%if %with_taglib
+#gw configure checks for 1.5, but it does not build with 1.6 in 2010.0
+BuildRequires: taglib-devel > 1.6
+%endif
 BuildRequires: libmtp-devel
 %if %with_mad
 BuildRequires:  libid3tag-devel
@@ -1368,7 +1376,9 @@ rm -fr %buildroot
 %endif
 %dir %_libdir/vlc/plugins/meta_engine
 %_libdir/vlc/plugins/meta_engine/libfolder_plugin.so
+%if %with_taglib
 %_libdir/vlc/plugins/meta_engine/libtaglib_plugin.so
+%endif
 %dir %_libdir/vlc/plugins/misc
 %_libdir/vlc/plugins/misc/libaudioscrobbler_plugin.so
 %_libdir/vlc/plugins/misc/libdummy_plugin.so*
