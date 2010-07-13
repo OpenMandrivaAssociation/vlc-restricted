@@ -2,9 +2,9 @@
 %define version 1.1.0
 %define snapshot	0
 %define pre		0
-%define rel 2
+%define rel 3
 %if %pre
-%define release		%mkrel -c %pre 1
+%define release		%mkrel -c %pre %rel
 %elsif %snapshot
 %define release %mkrel -c %snapshot %rel
 %else
@@ -792,14 +792,16 @@ Summary: DV codec plugin for the VLC media player
 Group: Video
 Requires: %{name} = %{version}
 Buildrequires:	libdv-devel
-%if %mdvver >= 201010
-BuildRequires:  libraw1394-devel
+%if %mdvver >= 201000
+BuildRequires:  libraw1394-devel >= 2.0.1
+BuildRequires:  libdc1394-devel >= 2.1.0
 %elseif %mdvver >= 200910
 BuildRequires:  libraw1394_8-devel
+BuildRequires:  libdc1394_12-devel
 %else
 BuildRequires:  libraw1394-devel
 %endif
-BuildRequires:  libavc1394-devel
+BuildRequires:  libavc1394-devel >= 0.5.3
 
 %description plugin-dv
 This plugin adds support for the DV video format to the VLC media player.
