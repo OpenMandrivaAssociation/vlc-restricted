@@ -35,6 +35,7 @@
 %define with_udev 1
 %define with_aa 1
 %define with_sdl 1
+%define with_sdl_image 1
 %define with_ggi 1
 %define with_svgalib 1
 %define with_fb 1
@@ -228,7 +229,7 @@
 %{?_with_gnutls:		%{expand: %%global with_gnutls 1}}
 
 %if %mdvver < 201010
-%define with_taglib 0
+%define with_sdl_image 0
 %endif
 
 %if %mdvver < 201000
@@ -273,6 +274,8 @@ Patch16: 200_osdmenu_paths.diff
 Patch17: 401_i420_mmx_pic.diff
 Patch18: vlc-1.1-new-xulrunner.patch
 Patch19: 0001-pulse-Use-the-user-agent-variable-for-the-client-nam.patch
+#gw build with taglib 1.6, check for the new cover art header file
+Patch20: vlc-1.1.0-build-with-taglib-1.6.patch
 License:	GPLv2+
 Group:		Video
 URL:		http://www.videolan.org/
@@ -330,8 +333,7 @@ Buildrequires:	qt4-devel
 %endif
 BuildRequires: libmesaglu-devel
 %if %with_taglib
-#gw configure checks for 1.5, but it does not build with 1.6 in 2010.0
-BuildRequires: taglib-devel > 1.6
+BuildRequires: taglib-devel > 1.5
 %endif
 BuildRequires: libmtp-devel
 %if %with_mad
@@ -635,7 +637,9 @@ Group: Video
 Requires: %{name} = %{version}
 Obsoletes: vlc-sdl
 Provides: vlc-sdl
-Buildrequires:	SDL_image-devel
+%if %with_sdl_image
+Buildrequires:	SDL_image-devel >= 1.2.10
+%endif
 Buildrequires:	nas-devel
 
 %description plugin-sdl
@@ -916,6 +920,7 @@ perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/X11R6/l
 %patch18 -p1
 %endif
 %patch19 -p1
+%patch20 -p1 -b .tag
 %if %snapshot
 ./bootstrap
 %endif
@@ -925,6 +930,7 @@ libtoolize --copy --force
 libtoolize --install --force
 %endif
 aclocal -I m4 
+autoheader
 autoconf 
 automake
 
@@ -1676,7 +1682,9 @@ rm -fr %buildroot
 %files plugin-sdl
 %defattr(-,root,root)
 %doc README
+%if %with_sdl_image
 %_libdir/vlc/plugins/codec/libsdl_image_plugin.so*
+%endif
 %_libdir/vlc/plugins/audio_output/libaout_sdl_plugin.so*
 %_libdir/vlc/plugins/video_output/libvout_sdl_plugin.so*
 %endif
