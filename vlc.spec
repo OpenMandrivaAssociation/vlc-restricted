@@ -255,8 +255,6 @@ Source0:	http://nightlies.videolan.org/build/source/%fname.tar.bz2
 %else
 Source0:	http://download.videolan.org/pub/videolan/%name/%{version}/%{fname}.tar.bz2
 %endif
-# (cg) 0.8.6d-6mdv Change priority of the pulseplugin to make it default
-Patch13: vlc-1.1.0-pulseprio.patch
 # (cg) 0.8.6e-2mdv Fix buffering in alsa where people use it over pulseaudio
 Patch14: vlc-0.8.6e-alsa-buffer.patch
 #gw patches from Debian:
@@ -891,9 +889,6 @@ perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/share/f
 perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/X11R6/lib/X11/fonts/TTF/VeraBd.ttf^" modules/misc/freetype.c
 %endif
 rm -rf doc/skins/curve_maker/CVS
-%if %with_pulse
-%patch13 -p1 -b .pulseprio
-%endif
 #%patch14 -p1 -b .alsabuffer
 %patch16 -p1
 #patch17 -p1
