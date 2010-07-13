@@ -2,7 +2,7 @@
 %define version 1.1.0
 %define snapshot	0
 %define pre		0
-%define rel 1
+%define rel 2
 %if %pre
 %define release		%mkrel -c %pre 1
 %elsif %snapshot
@@ -478,11 +478,20 @@ Shared code for the VLC media player
 This package contains code that is shared by different modules of the 
 VLC media player.
 
+%package -n %libnamecore
+Summary: Shared core code for the VLC media player
+Group: System/Libraries
+
+%description -n %libnamecore
+Shared core code for the VLC media player
+This package contains code that is shared by different modules of the
+VLC media player.
 
 %package -n %develname
 Summary: Development files for the VLC media player
 Group: Development/C
 Requires: %libname = %version
+Requires: %libnamecore = %version
 Provides: %name-devel = %version-%release
 Provides: lib%name-devel = %version-%release
 Obsoletes: %mklibname -d %name 0
@@ -1552,6 +1561,9 @@ rm -fr %buildroot
 %files -n %libname
 %defattr(-,root,root)
 %_libdir/libvlc.so.%{libmajor}*
+
+%files -n %libnamecore
+%defattr(-,root,root)
 %_libdir/libvlccore.so.%{coremajor}*
 
 %files -n %develname
