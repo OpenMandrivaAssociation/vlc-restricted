@@ -23,7 +23,6 @@
 
 %define with_plf 0
 
-%define with_mozilla 0
 %define with_xulrunner 1
 %define with_fribidi 1
 %define with_xml 1
@@ -101,7 +100,6 @@
 
 # without
 %{?_without_plf:	%{expand: %%global with_plf 0}}
-%{?_without_mozilla:	%{expand: %%global with_mozilla 0}}
 %{?_without_xulrunner:	%{expand: %%global with_xulrunner 0}}
 %{?_without_fribidi:	%{expand: %%global with_fribidi 0}}
 %{?_without_udev:	%{expand: %%global with_udev 0}}
@@ -163,7 +161,6 @@
 
 # with
 %{?_with_plf:    	%{expand: %%global with_plf 1}}
-%{?_with_mozilla:    	%{expand: %%global with_mozilla 1}}
 %{?_with_xulrunner:    	%{expand: %%global with_xulrunner 1}}
 %{?_with_fribidi:    	%{expand: %%global with_fribidi 1}}
 %{?_with_udev:		%{expand: %%global with_udev 1}}
@@ -229,12 +226,7 @@
 %if %mdvver < 201000
 %define with_schroedinger 0
 %define with_udev 0
-%endif
-
-%if %mdvver < 200900
-%define with_xulrunner 0
-%define with_mozilla 1
-%define with_libv4l 0
+%define with_dv 0
 %endif
 
 %if %with_plf
@@ -296,9 +288,6 @@ BuildRequires:  libgnutls-devel >= 1.0.17
 BuildRequires:  freetype2-devel
 %if %with_fribidi
 BuildRequires:  libfribidi-devel
-%endif
-%if %with_mozilla
-Buildrequires:	mozilla-firefox-devel >= 1.0
 %endif
 %if %with_xulrunner
 BuildRequires: xulrunner-devel
@@ -501,9 +490,6 @@ for the VLC media player, or standalone applications using features from VLC.
 Summary: Multimedia plugin for Mozilla, based on vlc
 group: Video
 Requires: %name = %version
-%if %with_mozilla
-%define ff_ver %(rpm -q --queryformat %{VERSION} mozilla-firefox)
-%endif
 %description -n mozilla-plugin-vlc
 This plugin adds support for MPEG, MPEG2, DVD and DivX to your Mozilla
 browser. The decoding process is done by vlc and the output window is
@@ -794,11 +780,6 @@ Buildrequires:	libdv-devel
 %if %mdvver >= 201000
 BuildRequires:  libraw1394-devel >= 2.0.1
 BuildRequires:  libdc1394-devel >= 2.1.0
-%elseif %mdvver >= 200910
-BuildRequires:  libraw1394_8-devel
-BuildRequires:  libdc1394_12-devel
-%else
-BuildRequires:  libraw1394-devel
 %endif
 BuildRequires:  libavc1394-devel >= 0.5.3
 
@@ -895,11 +876,7 @@ the VLC media player.
 cd m4
 rm -fv argz.m4 libtool.m4 ltdl.m4 ltoptions.m4 ltsugar.m4 ltversion.m4 lt~obsolete.m4
 cd ..
-%if %mdkversion >= 200700
 perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/share/fonts/TTF/VeraBd.ttf^" modules/misc/freetype.c
-%else
-perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/X11R6/lib/X11/fonts/TTF/VeraBd.ttf^" modules/misc/freetype.c
-%endif
 #%patch14 -p1 -b .alsabuffer
 %patch16 -p1
 #patch17 -p1
@@ -910,11 +887,7 @@ perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/X11R6/l
 %if %snapshot
 ./bootstrap
 %endif
-%if %mdvver <= 200900
-libtoolize --copy --force
-%else
 libtoolize --install --force
-%endif
 aclocal -I m4 
 autoheader
 autoconf 
@@ -939,7 +912,7 @@ export CPPFLAGS="$CPPFLAGS -I%_includedir/speex"
 %else
 	--disable-smb \
 %endif
-%if %with_mozilla || %with_xulrunner
+%if %with_xulrunner
 	--enable-mozilla \
 %else
 	--disable-mozilla \
@@ -1130,18 +1103,6 @@ mkdir -p %{buildroot}/{%{_miconsdir},%{_liconsdir}}
 install -m 644 %pngdir/16x16/vlc.png %buildroot/%_miconsdir/vlc.png
 install -m 644 %pngdir/32x32/vlc.png %buildroot/%_iconsdir/vlc.png
 install -m 644 %pngdir/48x48/vlc.png %buildroot/%_liconsdir/vlc.png
-
-
-%if %mdkversion < 200900
-%post -n %libname -p /sbin/ldconfig
-%postun -n %libname -p /sbin/ldconfig
-%post
-%update_menus
-%update_desktop_database
-%postun
-%clean_menus
-%clean_desktop_database
-%endif
 
 %clean
 rm -fr %buildroot
@@ -1572,7 +1533,7 @@ rm -fr %buildroot
 %_libdir/vlc/plugins/access_output/libaccess_output_shout_plugin.so
 %endif
 
-%if %with_mozilla || %with_xulrunner
+%if %with_xulrunner
 %files -n mozilla-plugin-vlc
 %defattr(-,root,root)
 %doc README
@@ -1589,17 +1550,6 @@ rm -fr %buildroot
 %_libdir/vlc/plugins/gui/libskins2_plugin.so*
 %_datadir/applications/mandriva-svlc.desktop
 %_datadir/vlc/skins2
-%if %mdkversion < 200900
-%post   -n svlc
-%update_menus
-%update_desktop_database
-%endif
-
-%if %mdkversion < 200900
-%postun -n svlc
-%clean_menus
-%clean_desktop_database
-%endif
 %endif
 
 %if %with_zvbi
