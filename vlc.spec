@@ -1,8 +1,8 @@
 %define name 		vlc
-%define version 1.1.0
+%define version 1.1.1
 %define snapshot	0
 %define pre		0
-%define rel 2
+%define rel 1
 %if %pre
 %define release		%mkrel -c %pre %rel
 %elsif %snapshot
@@ -31,7 +31,6 @@
 %define with_lirc 1
 %define	with_qt4 1
 %define	with_svlc 1
-%define with_hal 0
 %define with_udev 1
 %define with_aa 1
 %define with_sdl 1
@@ -67,7 +66,6 @@
 %define with_mkv 1
 %define with_a52 1
 %define with_vcd 1
-%define with_cddax 1
 %define with_cddb 1
 %define with_dv 1
 %define with_dvdnav 1
@@ -106,7 +104,6 @@
 %{?_without_mozilla:	%{expand: %%global with_mozilla 0}}
 %{?_without_xulrunner:	%{expand: %%global with_xulrunner 0}}
 %{?_without_fribidi:	%{expand: %%global with_fribidi 0}}
-%{?_without_hal:	%{expand: %%global with_hal 0}}
 %{?_without_udev:	%{expand: %%global with_udev 0}}
 %{?_without_ncurses:	%{expand: %%global with_ncurses 0}}
 %{?_without_lirc:	%{expand: %%global with_lirc 0}}
@@ -150,7 +147,6 @@
 %{?_without_sysfs:	%{expand: %%global with_sysfs 0}}
 %{?_without_satellite:	%{expand: %%global with_satellite 0}}
 %{?_without_vcd:	%{expand: %%global with_vcd 0}}
-%{?_without_cddax:	%{expand: %%global with_cddax 0}}
 %{?_without_cddb:	%{expand: %%global with_cddb 0}}
 %{?_without_shout:	%{expand: %%global with_shout 0}}
 
@@ -170,7 +166,6 @@
 %{?_with_mozilla:    	%{expand: %%global with_mozilla 1}}
 %{?_with_xulrunner:    	%{expand: %%global with_xulrunner 1}}
 %{?_with_fribidi:    	%{expand: %%global with_fribidi 1}}
-%{?_with_hal:		%{expand: %%global with_hal 1}}
 %{?_with_udev:		%{expand: %%global with_udev 1}}
 %{?_with_ncurses:    	%{expand: %%global with_ncurses 1}}
 %{?_with_lirc:       	%{expand: %%global with_lirc 1}}
@@ -214,7 +209,6 @@
 %{?_with_sysfs:       	%{expand: %%global with_sysfs 1}}
 %{?_with_satellite:    	%{expand: %%global with_satellite 1}}
 %{?_with_vcd:		%{expand: %%global with_vcd 1}}
-%{?_with_cddax:		%{expand: %%global with_cddax 1}}
 %{?_with_cddb:		%{expand: %%global with_cddb 1}}
 %{?_with_shout:		%{expand: %%global with_shout 1}}
 
@@ -235,7 +229,6 @@
 %if %mdvver < 201000
 %define with_schroedinger 0
 %define with_udev 0
-%define with_hal 1
 %endif
 
 %if %mdvver < 200900
@@ -274,8 +267,6 @@ Patch16: 200_osdmenu_paths.diff
 Patch17: 401_i420_mmx_pic.diff
 Patch18: vlc-1.1-new-xulrunner.patch
 Patch19: 0001-pulse-Use-the-user-agent-variable-for-the-client-nam.patch
-#gw build with taglib 1.6, check for the new cover art header file
-Patch20: vlc-1.1.0-build-with-taglib-1.6.patch
 License:	GPLv2+
 Group:		Video
 URL:		http://www.videolan.org/
@@ -372,13 +363,11 @@ Obsoletes: vlc-plugin-a52
 %if %with_vcd
 BuildRequires: libvcd-devel >= 0.7.21
 %endif
-%if %with_cddax
 BuildRequires: libcdio-devel >= 0.72
 %if %with_cddb
 BuildRequires: libcddb-devel >= 0.9.5
 %else
 BuildConflicts: libcddb-devel
-%endif
 %endif
 %if %with_smb
 BuildRequires: libsmbclient-devel >= 3.0.10
@@ -437,9 +426,6 @@ BuildRequires: libxml2-devel >= 2.6
 %endif
 %if %with_live
 BuildRequires: live-devel > 2007.12.27
-%endif
-%if %with_hal
-Buildrequires:	hal-devel >= 0.2.97
 %endif
 %if %with_xvideo
 BuildRequires:	libxv-devel
@@ -921,7 +907,6 @@ perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/X11R6/l
 %patch18 -p1
 %endif
 %patch19 -p1
-%patch20 -p1 -b .tag
 %if %snapshot
 ./bootstrap
 %endif
@@ -942,7 +927,7 @@ export CPPFLAGS="$CPPFLAGS -DOJI -DMOZ_X11"
 export CPPFLAGS="$CPPFLAGS -I/usr/include/ebml"
 #gw the speex headers have moved
 export CPPFLAGS="$CPPFLAGS -I%_includedir/speex"
-%configure2_5x  --enable-release --enable-pvr --disable-dependency-tracking \
+%configure2_5x --enable-pvr --disable-dependency-tracking \
   --disable-sse \
 %if %with_bonjour
 	--enable-bonjour \
@@ -962,19 +947,15 @@ export CPPFLAGS="$CPPFLAGS -I%_includedir/speex"
 %if %with_ncurses
 	--enable-ncurses \
 %endif
-%if !%with_hal
-       --disable-hal \
-%endif
 %if %with_lirc
 	--enable-lirc \
 %endif
-	--enable-x11 --enable-xvideo \
+	--enable-xvideo \
 %if %with_fb
 	--enable-fb \
 %else
 	--disable-fb \
 %endif
-	--disable-mga \
 %if %with_aa
 	--enable-aa \
 %endif
@@ -1080,13 +1061,10 @@ export CPPFLAGS="$CPPFLAGS -I%_includedir/speex"
 %if %with_vcd
 	--enable-vcdx \
 %endif
-%if %with_cddax 
-	--enable-cddax \
 %if %with_cddb
 	--enable-libcddb \
 %else
 	--disable-libcddb \
-%endif
 %endif
 %if %with_x264
 	--enable-x264 \
@@ -1204,9 +1182,6 @@ rm -fr %buildroot
 %_libdir/vlc/plugins/access/libaccess_mtp_plugin.so
 %_libdir/vlc/plugins/access/libaccess_oss_plugin.so
 #%_libdir/vlc/plugins/access/libaccess_rtmp_plugin.so
-%if %with_cddax
-#%_libdir/vlc/plugins/access/libcddax_plugin.so*
-%endif
 %_libdir/vlc/plugins/access/libcdda_plugin.so*
 #%_libdir/vlc/plugins/access/libaccess_directory_plugin.so*
 %_libdir/vlc/plugins/access/libaccess_fake_plugin.so*
@@ -1395,9 +1370,6 @@ rm -fr %buildroot
 %_libdir/vlc/plugins/misc/liblogger_plugin.so*
 #%_libdir/vlc/plugins/misc/libmemcpy*_plugin.so*
 %_libdir/vlc/plugins/misc/libosd_parser_plugin.so
-%if %with_hal
-%_libdir/vlc/plugins/misc/libprobe_hal_plugin.so
-%endif
 #%_libdir/vlc/plugins/misc/libscreensaver_plugin.so*
 %_libdir/vlc/plugins/misc/libstats_plugin.so
 %_libdir/vlc/plugins/misc/libsqlite_plugin.so
@@ -1450,9 +1422,6 @@ rm -fr %buildroot
 %_libdir/vlc/plugins/services_discovery/libpodcast_plugin.so*
 %_libdir/vlc/plugins/services_discovery/libsap_plugin.so*
 #%_libdir/vlc/plugins/services_discovery/libshout_plugin.so*
-%if %with_hal
-%_libdir/vlc/plugins/services_discovery/libhal_plugin.so*
-%endif
 %if %with_udev
 %_libdir/vlc/plugins/services_discovery/libudev_plugin.so*
 %endif
