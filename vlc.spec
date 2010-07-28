@@ -466,6 +466,8 @@ VLC media player.
 %package -n %libnamecore
 Summary: Shared core code for the VLC media player
 Group: System/Libraries
+#gw needed by the python bindings:
+Provides: libvlccore = %version-%release
 
 %description -n %libnamecore
 Shared core code for the VLC media player
