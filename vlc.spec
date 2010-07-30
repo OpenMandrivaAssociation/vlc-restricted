@@ -882,7 +882,7 @@ perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/share/f
 #%patch14 -p1 -b .alsabuffer
 %patch16 -p1
 #patch17 -p1
-%if %mdvver >= 201000
+%if %mdvver >= 200910
 %patch18 -p1
 %endif
 %patch19 -p1
