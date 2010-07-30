@@ -1,5 +1,5 @@
 %define name 		vlc
-%define version 1.1.1
+%define version 1.1.2
 %define snapshot	0
 %define pre		0
 %define rel 1
