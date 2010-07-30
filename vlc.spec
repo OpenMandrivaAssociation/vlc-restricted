@@ -50,6 +50,8 @@
 %define with_ass 1
 %define with_lua 1
 %define with_taglib 1
+%define with_mtp 1
+%define with_xcb_randr 1
 
 %ifarch %{ix86}
 %define with_loader 1
@@ -227,6 +229,7 @@
 %define with_schroedinger 0
 %define with_udev 0
 %define with_dv 0
+%define with_xcb_randr 0
 %endif
 
 %if %with_plf
@@ -316,7 +319,9 @@ BuildRequires: libmesaglu-devel
 %if %with_taglib
 BuildRequires: taglib-devel > 1.5
 %endif
-BuildRequires: libmtp-devel
+%if %with_mtp
+BuildRequires: libmtp-devel >= 1.0.0
+%endif
 %if %with_mad
 BuildRequires:  libid3tag-devel
 BuildRequires:  libmad-devel
@@ -329,6 +334,9 @@ Obsoletes: vlc-plugin-ogg
 %endif
 BuildRequires: xpm-devel
 BuildRequires: libxcb-util-devel
+%if %with_xcb_randr
+BuildRequires: libxcb-devel > 1.2
+%endif
 BuildRequires: libproxy-devel
 %if %with_speex
 Buildrequires:	libspeex-devel >= 1.1.6
@@ -1144,7 +1152,10 @@ rm -fr %buildroot
 %_libdir/vlc/plugins/access/libaccess_gnomevfs_plugin.so
 %_libdir/vlc/plugins/access/libaccess_imem_plugin.so
 %_libdir/vlc/plugins/access/libaccess_mmap_plugin.so
+%if %with_mtp
 %_libdir/vlc/plugins/access/libaccess_mtp_plugin.so
+%_libdir/vlc/plugins/services_discovery/libmtp_plugin.so
+%endif
 %_libdir/vlc/plugins/access/libaccess_oss_plugin.so
 #%_libdir/vlc/plugins/access/libaccess_rtmp_plugin.so
 %_libdir/vlc/plugins/access/libcdda_plugin.so*
@@ -1383,7 +1394,6 @@ rm -fr %buildroot
 
 %dir %_libdir/vlc/plugins/services_discovery/
 %_libdir/vlc/plugins/services_discovery/libmediadirs_plugin.so
-%_libdir/vlc/plugins/services_discovery/libmtp_plugin.so
 %_libdir/vlc/plugins/services_discovery/libpodcast_plugin.so*
 %_libdir/vlc/plugins/services_discovery/libsap_plugin.so*
 #%_libdir/vlc/plugins/services_discovery/libshout_plugin.so*
@@ -1462,7 +1472,9 @@ rm -fr %buildroot
 %_libdir/vlc/plugins/video_filter/libmotiondetect_plugin.so*
 %_libdir/vlc/plugins/video_filter/libnoise_plugin.so
 %_libdir/vlc/plugins/video_filter/libosdmenu_plugin.so*
+%if %with_xcb_randr
 %_libdir/vlc/plugins/video_filter/libpanoramix_plugin.so
+%endif
 %_libdir/vlc/plugins/video_filter/libpostproc_plugin.so
 %_libdir/vlc/plugins/video_filter/libpsychedelic_plugin.so
 %_libdir/vlc/plugins/video_filter/libpuzzle_plugin.so
