@@ -249,6 +249,7 @@ Source0:	http://nightlies.videolan.org/build/source/%fname.tar.bz2
 %else
 Source0:	http://download.videolan.org/pub/videolan/%name/%{version}/%{fname}.tar.bz2
 %endif
+Patch0: vlc-1.1.2-rvlc.patch
 # (cg) 0.8.6e-2mdv Fix buffering in alsa where people use it over pulseaudio
 Patch14: vlc-0.8.6e-alsa-buffer.patch
 #gw patches from Debian:
@@ -879,6 +880,7 @@ cd m4
 rm -fv argz.m4 libtool.m4 ltdl.m4 ltoptions.m4 ltsugar.m4 ltversion.m4 lt~obsolete.m4
 cd ..
 perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/share/fonts/TTF/VeraBd.ttf^" modules/misc/freetype.c
+%patch0 -p1
 #%patch14 -p1 -b .alsabuffer
 %patch16 -p1
 #patch17 -p1
