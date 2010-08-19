@@ -890,11 +890,16 @@ perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/share/f
 %if %snapshot
 ./bootstrap
 %endif
-#libtoolize --install --force
-#aclocal -I m4 
-#autoheader
-#autoconf 
-#automake
+#gw we always need to call libtoolize to replace Debian's libtool
+##libtool: Version mismatch error.  This is libtool 2.2.6b Debian-2.2.6b-2, but the
+##libtool: definition of this LT_INIT comes from libtool 2.2.10.
+##libtool: You should recreate aclocal.m4 with macros from libtool 2.2.6b Debian-2.2.6b-2
+##libtool: and run autoconf again.
+libtoolize --install --force
+aclocal -I m4 
+autoheader
+autoconf 
+automake
 
 %build
 # gw flags for the mozilla build 
