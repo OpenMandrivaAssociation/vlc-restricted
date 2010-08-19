@@ -891,6 +891,7 @@ perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/share/f
 ./bootstrap
 %endif
 #gw we always need to call libtoolize to replace Debian's libtool
+#we get this error on 2011.0 and 2010.0, but not on 2010.1
 ##libtool: Version mismatch error.  This is libtool 2.2.6b Debian-2.2.6b-2, but the
 ##libtool: definition of this LT_INIT comes from libtool 2.2.10.
 ##libtool: You should recreate aclocal.m4 with macros from libtool 2.2.6b Debian-2.2.6b-2
