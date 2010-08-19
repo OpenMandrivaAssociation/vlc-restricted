@@ -252,14 +252,9 @@ Source0:	http://nightlies.videolan.org/build/source/%fname.tar.bz2
 %else
 Source0:	http://download.videolan.org/pub/videolan/%name/%{version}/%{fname}.tar.bz2
 %endif
-# (cg) 0.8.6e-2mdv Fix buffering in alsa where people use it over pulseaudio
-Patch14: vlc-0.8.6e-alsa-buffer.patch
 #gw patches from Debian:
 #use absolute paths for OSD menu config
 Patch16: 200_osdmenu_paths.diff
-# Avoid non-PIC code in asm mmx chroma converter module by letting gcc manage
-# the addressing.                                                              # Patch from upstream trac ticket #1383.
-Patch17: 401_i420_mmx_pic.diff
 Patch18: vlc-1.1-new-xulrunner.patch
 Patch19: 0001-pulse-Use-the-user-agent-variable-for-the-client-nam.patch
 License:	GPLv2+
@@ -887,9 +882,7 @@ cd m4
 rm -fv argz.m4 libtool.m4 ltdl.m4 ltoptions.m4 ltsugar.m4 ltversion.m4 lt~obsolete.m4
 cd ..
 perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/share/fonts/TTF/VeraBd.ttf^" modules/misc/freetype.c
-#%patch14 -p1 -b .alsabuffer
 %patch16 -p1
-#patch17 -p1
 %if %mdvver >= 200910
 %patch18 -p1
 %endif
@@ -897,11 +890,11 @@ perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/share/f
 %if %snapshot
 ./bootstrap
 %endif
-libtoolize --install --force
-aclocal -I m4 
-autoheader
-autoconf 
-automake
+#libtoolize --install --force
+#aclocal -I m4 
+#autoheader
+#autoconf 
+#automake
 
 %build
 # gw flags for the mozilla build 
