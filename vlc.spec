@@ -2,7 +2,7 @@
 %define version 1.1.3
 %define snapshot	0
 %define pre		0
-%define rel 1
+%define rel 2
 %if %pre
 %define release		%mkrel -c %pre %rel
 %elsif %snapshot
@@ -252,6 +252,9 @@ Source0:	http://nightlies.videolan.org/build/source/%fname.tar.bz2
 %else
 Source0:	http://download.videolan.org/pub/videolan/%name/%{version}/%{fname}.tar.bz2
 %endif
+# disable the screensaver while playing video
+# https://qa.mandriva.com/show_bug.cgi?id=60749
+Patch0: vlc-xcb-fix-screensaver-inhibit.patch
 #gw patches from Debian:
 #use absolute paths for OSD menu config
 Patch16: 200_osdmenu_paths.diff
@@ -882,6 +885,7 @@ cd m4
 rm -fv argz.m4 libtool.m4 ltdl.m4 ltoptions.m4 ltsugar.m4 ltversion.m4 lt~obsolete.m4
 cd ..
 perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/share/fonts/TTF/VeraBd.ttf^" modules/misc/freetype.c
+%patch0 -p1
 %patch16 -p1
 %if %mdvver >= 200910
 %patch18 -p1
