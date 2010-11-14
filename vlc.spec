@@ -1,5 +1,5 @@
 %define name 		vlc
-%define version 1.1.4.1
+%define version 1.1.5
 %define snapshot	0
 %define pre		0
 %define rel 1
@@ -42,6 +42,7 @@
 %define with_twolame 1
 %define with_schroedinger 1
 %define with_fluidsynth 1
+%define with_gme 1
 %define with_zvbi 1
 %define with_kate 1
 %define with_kde 1
@@ -120,6 +121,7 @@
 %{?_without_twolame:	%{expand: %%global with_twolame 0}}
 %{?_without_schroedinger: %{expand: %%global with_schroedinger 0}}
 %{?_without_fluidsynth:	%{expand: %%global with_fluidsynth 0}}
+%{?_without_gme:	%{expand: %%global with_gme 0}}
 %{?_without_lua:	%{expand: %%global with_lua 0}}
 %{?_without_zvbi:	%{expand: %%global with_zvbi 0}}
 %{?_without_kate:	%{expand: %%global with_kate 0}}
@@ -180,7 +182,8 @@
 %{?_with_xvideo:       	%{expand: %%global with_xvideo 1}}
 %{?_with_twolame:      	%{expand: %%global with_twolame 1}}
 %{?_with_schroedinger: 	%{expand: %%global with_schroedinger 1}}
-%{?_with_fluidsynth:      	%{expand: %%global with_fluidsynth 1}}
+%{?_with_fluidsynth:	%{expand: %%global with_fluidsynth 1}}
+%{?_with_gme:		%{expand: %%global with_gme 1}}
 %{?_with_lua:      	%{expand: %%global with_lua 1}}
 %{?_with_zvbi:      	%{expand: %%global with_zvbi 1}}
 %{?_with_kate:      	%{expand: %%global with_kate 1}}
@@ -745,6 +748,18 @@ BuildRequires: libfluidsynth-devel
 %description plugin-fluidsynth
 This plugin adds support for MIDI playback to VLC based on the Fluidsynth
 library.
+%endif
+
+%if %with_gme
+%package plugin-gme
+Summary: Add game music playback support to VLC based on libgme
+Group: Sound
+Requires: %{name} = %{version}
+BuildRequires: libgme-devel
+
+%description plugin-gme
+This plugin adds support for video game music playback to VLC based on the
+GME library.
 %endif
 
 %if %with_schroedinger
@@ -1352,6 +1367,7 @@ rm -fr %buildroot
 %if %with_xml
 %_libdir/vlc/plugins/misc/libxml_plugin.so*
 %endif
+%_libdir/vlc/plugins/misc/libxscreensaver_plugin.so
 %_libdir/vlc/plugins/misc/libxtag_plugin.so*
 
 %dir %_libdir/vlc/plugins/mmx
@@ -1683,6 +1699,13 @@ rm -fr %buildroot
 %defattr(-,root,root)
 %doc README
 %_libdir/vlc/plugins/codec/libfluidsynth_plugin.so
+%endif
+
+%if %with_gme
+%files plugin-gme
+%defattr(-,root,root)
+%doc README
+%_libdir/vlc/plugins/demux/libgme_plugin.so
 %endif
 
 %if %with_schroedinger
