@@ -2,7 +2,7 @@
 %define version 1.1.5
 %define snapshot	0
 %define pre		0
-%define rel 1
+%define rel 2
 %if %pre
 %define release		%mkrel -c %pre %rel
 %elsif %snapshot
@@ -259,7 +259,8 @@ Source0:	http://download.videolan.org/pub/videolan/%name/%{version}/%{fname}.tar
 #use absolute paths for OSD menu config
 Patch16: 200_osdmenu_paths.diff
 Patch18: vlc-1.1-new-xulrunner.patch
-Patch19: 0001-pulse-Use-the-user-agent-variable-for-the-client-nam.patch
+Patch0100: 0100-pulse-Use-the-user-agent-variable-for-the-client-nam.patch
+Patch0101: 0101-pulse-Disable-xlib-in-pulse.-libpulse-now-uses-xcb-o.patch
 License:	GPLv2+
 Group:		Video
 URL:		http://www.videolan.org/
@@ -901,7 +902,11 @@ perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/share/f
 %if %mdvver >= 200910
 %patch18 -p1
 %endif
-%patch19 -p1
+%patch100 -p1
+%if %mdvver >= 201010
+# (cg) XCB-ified libpulse is available via 2010.1 main/updates
+%patch101 -p1
+%endif
 %if %snapshot
 ./bootstrap
 %endif
