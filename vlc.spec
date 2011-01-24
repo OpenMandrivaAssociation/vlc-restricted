@@ -1,8 +1,8 @@
 %define name 		vlc
-%define version 1.1.5
+%define version 1.1.6
 %define snapshot	0
 %define pre		0
-%define rel 4
+%define rel 1
 %if %pre
 %define release		%mkrel -c %pre %rel
 %elsif %snapshot
@@ -255,13 +255,11 @@ Source0:	http://nightlies.videolan.org/build/source/%fname.tar.bz2
 %else
 Source0:	http://download.videolan.org/pub/videolan/%name/%{version}/%{fname}.tar.bz2
 %endif
-Patch0: vlc-fix-heap-overflows-in-cdg-decoder.patch
+Patch1: vlc-1.1.6-missing-header.patch
 #gw patches from Debian:
 #use absolute paths for OSD menu config
 Patch16: 200_osdmenu_paths.diff
 Patch18: vlc-1.1-new-xulrunner.patch
-Patch0100: 0100-pulse-Use-the-user-agent-variable-for-the-client-nam.patch
-Patch0101: 0101-pulse-Disable-xlib-in-pulse.-libpulse-now-uses-xcb-o.patch
 License:	GPLv2+
 Group:		Video
 URL:		http://www.videolan.org/
@@ -893,21 +891,16 @@ the VLC media player.
 %else
 %setup -q -n %fname
 %endif
+%patch1 -p1
 #gw if we want to regenerate libtool, we must remove the local versions of
 # the libtool m4 files, aclocal will replace them
 cd m4
 rm -fv argz.m4 libtool.m4 ltdl.m4 ltoptions.m4 ltsugar.m4 ltversion.m4 lt~obsolete.m4
 cd ..
 perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/share/fonts/TTF/VeraBd.ttf^" modules/misc/freetype.c
-%patch0 -p1
 %patch16 -p1
 %if %mdvver >= 200910
 %patch18 -p1
-%endif
-%patch100 -p1
-%if %mdvver >= 201010
-# (cg) XCB-ified libpulse is available via 2010.1 main/updates
-%patch101 -p1
 %endif
 %if %snapshot
 ./bootstrap
