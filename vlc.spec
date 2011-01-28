@@ -260,6 +260,8 @@ Patch1: vlc-1.1.6-missing-header.patch
 #use absolute paths for OSD menu config
 Patch16: 200_osdmenu_paths.diff
 Patch18: vlc-1.1-new-xulrunner.patch
+# (cg) The version of PA on mdv 2010.1+updates is OK for VLC so it should be patched accordingly
+Patch19: vlc-1.1.6-mdv2010.1-updated-pulse-version-is-ok.patch
 License:	GPLv2+
 Group:		Video
 URL:		http://www.videolan.org/
@@ -901,6 +903,9 @@ perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/share/f
 %patch16 -p1
 %if %mdvver >= 200910
 %patch18 -p1
+%endif
+%if %mdvver >= 201010
+%patch19 -p1
 %endif
 %if %snapshot
 ./bootstrap
