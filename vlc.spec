@@ -261,6 +261,7 @@ Patch16: 200_osdmenu_paths.diff
 Patch18: vlc-1.1-new-xulrunner.patch
 # (cg) The version of PA on mdv 2010.1+updates is OK for VLC so it should be patched accordingly
 Patch19: vlc-1.1.7-mdv2010.1-updated-pulse-version-is-ok.patch
+Patch20: vlc-1.1.7-matroska-1.1.patch
 License:	GPLv2+
 Group:		Video
 URL:		http://www.videolan.org/
@@ -905,6 +906,9 @@ perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/share/f
 %if %mdvver >= 201010
 %patch19 -p1
 %endif
+%if %mdvver >= 201100
+%patch20 -p0
+%endif
 %if %snapshot
 ./bootstrap
 %endif
@@ -1148,8 +1152,9 @@ rm -fr %buildroot
 %_datadir/vlc/osdmenu/
 %_datadir/vlc/utils
 %dir %_libdir/vlc
-
 %_libdir/vlc/vlc-cache-gen
+
+%dir %_libdir/vlc/plugins
 
 %dir %_libdir/vlc/plugins/3dnow
 %_libdir/vlc/plugins/3dnow/libmemcpy3dn_plugin.so
