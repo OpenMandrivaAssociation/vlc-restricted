@@ -1,8 +1,8 @@
 %define name 		vlc
-%define version 1.1.6
+%define version 1.1.7
 %define snapshot	0
 %define pre		0
-%define rel 3
+%define rel 1
 %if %pre
 %define release		%mkrel -c %pre %rel
 %elsif %snapshot
@@ -255,13 +255,12 @@ Source0:	http://nightlies.videolan.org/build/source/%fname.tar.bz2
 %else
 Source0:	http://download.videolan.org/pub/videolan/%name/%{version}/%{fname}.tar.bz2
 %endif
-Patch1: vlc-1.1.6-missing-header.patch
 #gw patches from Debian:
 #use absolute paths for OSD menu config
 Patch16: 200_osdmenu_paths.diff
 Patch18: vlc-1.1-new-xulrunner.patch
 # (cg) The version of PA on mdv 2010.1+updates is OK for VLC so it should be patched accordingly
-Patch19: vlc-1.1.6-mdv2010.1-updated-pulse-version-is-ok.patch
+Patch19: vlc-1.1.7-mdv2010.1-updated-pulse-version-is-ok.patch
 License:	GPLv2+
 Group:		Video
 URL:		http://www.videolan.org/
@@ -893,7 +892,6 @@ the VLC media player.
 %else
 %setup -q -n %fname
 %endif
-%patch1 -p1
 #gw if we want to regenerate libtool, we must remove the local versions of
 # the libtool m4 files, aclocal will replace them
 cd m4
