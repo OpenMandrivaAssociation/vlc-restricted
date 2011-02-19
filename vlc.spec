@@ -236,6 +236,10 @@
 %endif
 
 %if %with_plf
+%if %mdvver >= 201100
+# make EVR of plf build higher than regular to allow update, needed with rpm5 mkrel
+%define extrarelsuffix plf
+%endif
 %define distsuffix plf
 %global with_faac 1
 %global with_faad 1
@@ -249,7 +253,7 @@
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		%{name}
 Version:	%{version}
-Release:	%{release}
+Release:	%{release}%{?extrarelsuffix}
 %if %snapshot
 Source0:	http://nightlies.videolan.org/build/source/%fname.tar.bz2
 %else
