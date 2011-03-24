@@ -1,8 +1,8 @@
 %define name 		vlc
-%define version 1.1.7
+%define version 1.1.8
 %define snapshot	0
 %define pre		0
-%define rel 3
+%define rel 1
 %if %pre
 %define release		%mkrel -c %pre %rel
 %elsif %snapshot
@@ -265,7 +265,6 @@ Patch16: 200_osdmenu_paths.diff
 Patch18: vlc-1.1-new-xulrunner.patch
 # (cg) The version of PA on mdv 2010.1+updates is OK for VLC so it should be patched accordingly
 Patch19: vlc-1.1.7-mdv2010.1-updated-pulse-version-is-ok.patch
-Patch20: vlc-1.1.7-matroska-1.1.patch
 License:	GPLv2+
 Group:		Video
 URL:		http://www.videolan.org/
@@ -910,9 +909,6 @@ perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/share/f
 %if %mdvver >= 201010
 %patch19 -p1
 %endif
-%if %mdvver >= 201100
-%patch20 -p0
-%endif
 %if %snapshot
 ./bootstrap
 %endif
@@ -1220,7 +1216,6 @@ rm -fr %buildroot
 %dir %_libdir/vlc/plugins/audio_filter
 %_libdir/vlc/plugins/audio_filter/libaudiobargraph_a_plugin.so
 %_libdir/vlc/plugins/audio_filter/libaudio_format_plugin.so*
-%_libdir/vlc/plugins/audio_filter/libbandlimited_resampler_plugin.so*
 %_libdir/vlc/plugins/audio_filter/libchorus_flanger_plugin.so
 %_libdir/vlc/plugins/audio_filter/libconverter_fixed_plugin.so
 #%_libdir/vlc/plugins/audio_filter/libconverter_float_plugin.so
