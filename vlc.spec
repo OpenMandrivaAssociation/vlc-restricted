@@ -2,7 +2,7 @@
 %define version 1.1.8
 %define snapshot	0
 %define pre		0
-%define rel 1
+%define rel 2
 %if %pre
 %define release		%mkrel -c %pre %rel
 %elsif %snapshot
@@ -1194,7 +1194,9 @@ rm -fr %buildroot
 %endif
 %_libdir/vlc/plugins/access/libfilesystem_plugin.so
 %_libdir/vlc/plugins/access/librtp_plugin.so
+%if %mdvver < 201100
 %_libdir/vlc/plugins/access/libv4l_plugin.so*
+%endif
 %_libdir/vlc/plugins/access/libv4l2_plugin.so*
 %_libdir/vlc/plugins/access/libdvdread_plugin.so*
 %_libdir/vlc/plugins/access/libpvr_plugin.so
