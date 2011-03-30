@@ -226,10 +226,10 @@
 
 %if %mdvver < 201010
 %define with_sdl_image 0
+%define with_schroedinger 0
 %endif
 
 %if %mdvver < 201000
-%define with_schroedinger 0
 %define with_udev 0
 %define with_dv 0
 %define with_xcb_randr 0
