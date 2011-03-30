@@ -772,7 +772,7 @@ GME library.
 Summary: Dirac plugin for VLC based on Schroedinger
 Group: Video
 Requires: %{name} = %{version}
-BuildRequires: libschroedinger-devel >= 1.0.6
+BuildRequires: libschroedinger-devel >= 1.0.10
 
 %description plugin-schroedinger
 These plugins add support for the Dirac video format based on Schroedinger.
