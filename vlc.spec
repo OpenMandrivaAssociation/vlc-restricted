@@ -1,8 +1,8 @@
 %define name 		vlc
-%define version 1.1.8
+%define version 1.1.9
 %define snapshot	0
 %define pre		0
-%define rel 4
+%define rel 3
 %if %pre
 %define release		%mkrel -c %pre %rel
 %elsif %snapshot
@@ -1084,6 +1084,7 @@ export CPPFLAGS="$CPPFLAGS -I%_includedir/speex"
 %if %with_twolame
 	--enable-twolame \
 %endif
+	--enable-realrtsp \
 %ifarch x86_64
         --with-pic
 %endif
@@ -1179,6 +1180,7 @@ rm -fr %buildroot
 %_libdir/vlc/plugins/services_discovery/libmtp_plugin.so
 %endif
 %_libdir/vlc/plugins/access/libaccess_oss_plugin.so
+%_libdir/vlc/plugins/access/libaccess_realrtsp_plugin.so
 #%_libdir/vlc/plugins/access/libaccess_rtmp_plugin.so
 %_libdir/vlc/plugins/access/libcdda_plugin.so*
 #%_libdir/vlc/plugins/access/libaccess_directory_plugin.so*
