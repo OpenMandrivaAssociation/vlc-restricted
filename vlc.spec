@@ -226,7 +226,6 @@
 
 %if %mdvver < 201100
 %define with_schroedinger 0
-%define with_alsa 0
 %endif
 
 %if %mdvver < 201010
@@ -267,6 +266,9 @@ Source0:	http://download.videolan.org/pub/videolan/%name/%{version}/%{fname}.tar
 #use absolute paths for OSD menu config
 Patch16: 200_osdmenu_paths.diff
 Patch18: vlc-1.1.10-new-xulrunner.patch
+# (cg) The version of PA on mdv 2010.1+updates is OK for VLC so it should be patched accordingly
+Patch19: vlc-1.1.10-mdv2010.1-updated-pulse-version-is-ok.patch
+
 License:	GPLv2+
 Group:		Video
 URL:		http://www.videolan.org/
@@ -908,6 +910,9 @@ perl -pi -e "s^/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf^/usr/share/f
 %if %mdvver >= 200910
 %patch18 -p1 -b .new-xulrunner
 %endif
+%if %mdvver >= 201010
+%patch19 -p1 -b .pulse-version
+%endif
 %if %snapshot
 ./bootstrap
 %endif
@@ -1161,7 +1166,6 @@ rm -fr %buildroot
 
 
 %dir %_libdir/vlc/plugins/access
-%_libdir/vlc/plugins/access/libaccess_alsa_plugin.so
 %_libdir/vlc/plugins/access/libaccess_attachment_plugin.so
 %_libdir/vlc/plugins/access/libaccess_avio_plugin.so
 %_libdir/vlc/plugins/access/libaccess_bd_plugin.so
@@ -1532,6 +1536,7 @@ rm -fr %buildroot
 %dir %_libdir/vlc/plugins/visualization
 %_libdir/vlc/plugins/visualization/libvisual_plugin.so*
 %if %with_alsa
+%_libdir/vlc/plugins/access/libaccess_alsa_plugin.so
 %_libdir/vlc/plugins/audio_output/libalsa_plugin.so*
 %endif
 %_mandir/man1/vlc.*
