@@ -226,6 +226,7 @@
 
 %if %mdvver < 201100
 %define with_schroedinger 0
+%define with_alsa 0
 %endif
 
 %if %mdvver < 201010
@@ -393,7 +394,7 @@ Obsoletes: vlc-plugin-faad
 BuildRequires: libfaac-devel
 %endif
 %if %with_alsa
-BuildRequires:	libalsa-devel
+BuildRequires:	libalsa-devel >= 1.0.23
 %endif
 %if %with_pulse
 BuildRequires:	pulseaudio-devel >= 0.9.10
@@ -1030,8 +1031,8 @@ export CPPFLAGS="$CPPFLAGS -I%_includedir/speex"
 %if %with_jack
 	--enable-jack \
 %endif
-%if %with_alsa
-	--enable-alsa \
+%if ! %with_alsa
+	--disable-alsa \
 %endif
 %if %with_mpeg2dec
 	--enable-libmpeg2 \
