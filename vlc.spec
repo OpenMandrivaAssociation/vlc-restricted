@@ -1030,8 +1030,8 @@ export CPPFLAGS="$CPPFLAGS -I%_includedir/speex"
 %else
 	--disable-dvb --disable-satellite \
 %endif
-%if %with_pulse
-	--enable-pulse \
+%if ! %with_pulse
+	--disable-pulse \
 %endif
 %if %with_jack
 	--enable-jack \
