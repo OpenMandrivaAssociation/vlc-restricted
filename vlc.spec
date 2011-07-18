@@ -1,8 +1,8 @@
 %define name 		vlc
-%define version 1.1.10
+%define version 1.1.11
 %define snapshot	0
 %define pre		0
-%define rel 2
+%define rel 1
 %if %pre
 %define release		%mkrel -c %pre %rel
 %elsif %snapshot
@@ -267,7 +267,7 @@ Source0:	http://download.videolan.org/pub/videolan/%name/%{version}/%{fname}.tar
 Patch16: 200_osdmenu_paths.diff
 Patch18: vlc-1.1.10-new-xulrunner.patch
 # (cg) The version of PA on mdv 2010.1+updates is OK for VLC so it should be patched accordingly
-Patch19: vlc-1.1.10-mdv2010.1-updated-pulse-version-is-ok.patch
+Patch19: vlc-1.1.11-mdv2010.1-updated-pulse-version-is-ok.patch
 
 License:	GPLv2+
 Group:		Video
