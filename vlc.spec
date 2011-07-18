@@ -224,10 +224,6 @@
 %{?_with_mod:		%{expand: %%global with_mod 1}}
 %{?_with_gnutls:		%{expand: %%global with_gnutls 1}}
 
-%if %mdvver < 201100
-%define with_schroedinger 0
-%endif
-
 %if %mdvver < 201010
 %define with_sdl_image 0
 %endif
@@ -776,7 +772,7 @@ GME library.
 Summary: Dirac plugin for VLC based on Schroedinger
 Group: Video
 Requires: %{name} = %{version}
-BuildRequires: libschroedinger-devel >= 1.0.10
+BuildRequires: libschroedinger-devel >= 1.0.6
 
 %description plugin-schroedinger
 These plugins add support for the Dirac video format based on Schroedinger.
