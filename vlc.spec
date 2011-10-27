@@ -2,7 +2,7 @@
 %define version 1.1.11
 %define snapshot	0
 %define pre		0
-%define rel 3
+%define rel 4
 %if %pre
 %define release		%mkrel -c %pre %rel
 %elsif %snapshot
