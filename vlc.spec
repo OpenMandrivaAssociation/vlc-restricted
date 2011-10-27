@@ -336,6 +336,9 @@ Obsoletes: vlc-plugin-ogg
 %endif
 BuildRequires: xpm-devel
 BuildRequires: libxcb-util-devel
+%if %mdvver >= 201200
+BuildRequires: xcb-util-keysyms-devel
+%endif
 %if %with_xcb_randr
 BuildRequires: libxcb-devel > 1.2
 %endif
