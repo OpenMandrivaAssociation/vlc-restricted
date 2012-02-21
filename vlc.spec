@@ -335,7 +335,7 @@ Buildrequires:	libspeex-devel >= 1.1.6
 Buildrequires:	libflac-devel
 %endif
 %if %with_mkv
-Buildrequires:	libmatroska-devel >= 0.8.0
+Buildrequires:	libmatroska-devel >= 1.0.0 
 %endif
 %if %with_dvdnav
 Buildrequires:	libdvdnav-devel >= 0.1.9
