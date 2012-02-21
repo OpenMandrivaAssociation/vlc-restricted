@@ -397,7 +397,7 @@ BuildRequires: avahi-client-devel
 %endif
 
 %if %with_dvbpsi
-BuildRequires: libdvbpsi-devel
+BuildRequires: libdvbpsi-devel >= 0.1.7
 %endif
 BuildRequires: autoconf2.5
 BuildRequires: gettext-devel
