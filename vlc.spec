@@ -214,6 +214,11 @@
 %define with_goom 1
 %endif
 
+%if %mdvver < 201100
+%define with_libv4l 0
+%define with_schroedinger 0
+%endif
+
 %if %mdvver < 201010
 %define with_sdl_image 0
 %endif
@@ -284,11 +289,7 @@ BuildRequires:  freetype2-devel
 BuildRequires:  libfribidi-devel
 %endif
 %if %with_libv4l
-%if %mdvver >= 201010
-BuildRequires: v4l-utils-devel
-%else
 BuildRequires: libv4l-devel
-%endif
 %endif
 %if %with_udev
 BuildRequires: udev-devel >= 142
@@ -718,7 +719,7 @@ GME library.
 Summary: Dirac plugin for VLC based on Schroedinger
 Group: Video
 Requires: %{name} = %{version}
-BuildRequires: libschroedinger-devel >= 1.0.6
+BuildRequires: libschroedinger-devel >= 1.0.10
 
 %description plugin-schroedinger
 These plugins add support for the Dirac video format based on Schroedinger.
@@ -1105,9 +1106,6 @@ rm -fr %buildroot
 %_libdir/vlc/plugins/access/librtp_plugin.so
 %_libdir/vlc/plugins/access/libsdp_plugin.so
 %_libdir/vlc/plugins/access/libstream_filter_rar_plugin.so
-%if %mdvver < 201100
-%_libdir/vlc/plugins/access/libv4l_plugin.so*
-%endif
 %_libdir/vlc/plugins/access/libv4l2_plugin.so*
 %_libdir/vlc/plugins/access/libdvdread_plugin.so*
 %_libdir/vlc/plugins/access/libpvr_plugin.so
