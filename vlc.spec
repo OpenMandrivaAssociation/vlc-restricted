@@ -1,5 +1,5 @@
 %define name 		vlc
-%define version 2.0.0
+%define version 2.0.1
 %define snapshot	0
 %define pre		0
 %define rel 1
@@ -421,7 +421,7 @@ BuildRequires:	libxv-devel
 %endif
 BuildRequires: libnotify-devel
 BuildRequires: gnome-vfs2-devel
-BuildRequires: portaudio0-devel
+BuildRequires: portaudio-devel
 BuildRequires: dirac-devel
 BuildRequires: librsvg-devel
 BuildRequires: libcaca-devel
