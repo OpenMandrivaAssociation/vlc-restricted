@@ -282,7 +282,7 @@ BuildRequires:  libtar-devel
 BuildRequires:  libmodplug-devel >= 1:0.7
 %endif
 %if %with_gnutls
-BuildRequires:  libgnutls-devel >= 1.0.17
+BuildRequires:  gnutls-devel >= 1.0.17
 %endif
 BuildRequires:  freetype2-devel
 %if %with_fribidi
@@ -421,7 +421,7 @@ BuildRequires:	libxv-devel
 %endif
 BuildRequires: libnotify-devel
 BuildRequires: gnome-vfs2-devel
-BuildRequires: portaudio-devel
+BuildRequires: portaudio0-devel
 BuildRequires: dirac-devel
 BuildRequires: librsvg-devel
 BuildRequires: libcaca-devel
@@ -540,7 +540,7 @@ This plugin adds lua scripting and provides a few example scripts as well.
 Summary: Ncurses console-based plugin for the VLC media player
 Group: Video
 Requires: %{name} = %{version}
-Buildrequires:	libncurses-devel
+Buildrequires:	ncurses-devel
 
 %description plugin-ncurses
 This plugin adds a ncurses interface to the VLC media player. To
