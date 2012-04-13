@@ -284,7 +284,7 @@ BuildRequires:	gnutls-devel >= 1.0.17
 %endif
 BuildRequires:	freetype2-devel
 %if %{with_fribidi}
-BuildRequires:	libfribidi-devel
+BuildRequires:	fribidi-devel
 %endif
 %if %{with_libv4l}
 BuildRequires:	libv4l-devel
