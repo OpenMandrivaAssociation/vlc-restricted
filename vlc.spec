@@ -1,6 +1,6 @@
 %define snapshot	0
 %define pre		0
-%define rel 2
+%define rel 3
 %if %{pre}
 %define release		%mkrel -c %{pre} %{rel}
 %elsif %{snapshot}
@@ -253,6 +253,7 @@ Source0:	http://nightlies.videolan.org/build/source/%{fname}.tar.xz
 %else
 Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{fname}.tar.xz
 %endif
+Patch1:		vlc-2.0.1-automake-1.12.patch
 # (cg) The version of PA on mdv 2010.1+updates is OK for VLC so it should be patched accordingly
 Patch19:	vlc-2.0.0-mdv2010.1-updated-pulse-version-is-ok.patch
 Patch20:	vlc-2.0.0-fix-default-font.patch
@@ -271,7 +272,7 @@ Provides:	vlc-plugin-dvb vlc-plugin-mad vlc-plugin-alsa
 Obsoletes:	vlc-plugin-dvb vlc-plugin-mad vlc-plugin-alsa
 Requires:	fonts-ttf-vera
 %if %{with_sysfs}
-BuildRequires:	libsysfs-devel
+BuildRequires:	sysfsutils-devel
 %endif
 %if %{with_tar}
 BuildRequires:	libtar-devel
@@ -328,7 +329,7 @@ BuildRequires:	xcb-devel > 1.2
 %endif
 BuildRequires:	libproxy-devel
 %if %{with_speex}
-Buildrequires:	libspeex-devel >= 1.1.6
+Buildrequires:	pkgconfig(speex) >= 1.1.16
 %endif
 %if %{with_flac}
 Buildrequires:	libflac-devel
@@ -848,6 +849,7 @@ the VLC media player.
 %else
 %setup -q -n %{fname}
 %endif
+%patch1 -p1 -b .automake12~
 #gw if we want to regenerate libtool, we must remove the local versions of
 # the libtool m4 files, aclocal will replace them
 cd m4
