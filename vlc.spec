@@ -1,6 +1,6 @@
 %define snapshot	0
 %define pre		0
-%define rel 3
+%define rel 1
 %if %{pre}
 %define release		%mkrel -c %{pre} %{rel}
 %elsif %{snapshot}
@@ -246,7 +246,7 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	2.0.2
+Version:	2.0.3
 Release:	%{release}%{?extrarelsuffix}
 %if %{snapshot}
 Source0:	http://nightlies.videolan.org/build/source/%{fname}.tar.xz
