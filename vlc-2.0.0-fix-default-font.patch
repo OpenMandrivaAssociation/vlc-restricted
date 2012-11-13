@@ -1,0 +1,11 @@
+--- vlc-2.0.0/modules/text_renderer/freetype.c.fontpath	2012-02-20 11:18:04.131225762 +0100
++++ vlc-2.0.0/modules/text_renderer/freetype.c	2012-02-20 11:19:11.917241901 +0100
+@@ -58,7 +58,7 @@
+ # define DEFAULT_FONT_FILE "/usr/share/fonts/nokia/nosnb.ttf"
+ # define DEFAULT_FAMILY "Nokia Sans Bold"
+ #else
+-# define DEFAULT_FONT_FILE "/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf"
++# define DEFAULT_FONT_FILE "/usr/share/fonts/TTF/VeraBd.ttf"
+ # define DEFAULT_FAMILY "Serif Bold"
+ #endif
+ 

@@ -1,0 +1,31 @@
+--- vlc-2.0.0/configure.ac.live555	2012-02-20 15:21:16.697763573 +0100
++++ vlc-2.0.0/configure.ac	2012-02-20 15:39:44.717763569 +0100
+@@ -1720,7 +1720,7 @@ AS_IF([test "${enable_live555}" != "no"
+   AC_LANG_PUSH(C++)
+   CPPFLAGS_save="${CPPFLAGS}"
+   AS_IF([test -z "${CONTRIB_DIR}"], [
+-    CPPFLAGS_live555="-I/usr/include/liveMedia -I/usr/include/groupsock -I/usr/include/BasicUsageEnvironment -I/usr/include/UsageEnvironment"
++    CPPFLAGS_live555="-I${libdir}/live/liveMedia/include -I${libdir}/live/groupsock/include -I${libdir}/live/BasicUsageEnvironment/include -I${libdir}/live/UsageEnvironment/include"
+   ], [
+     CPPFLAGS_live555="-I${CONTRIB_DIR}/include/liveMedia -I${CONTRIB_DIR}/include/groupsock -I${CONTRIB_DIR}/include/BasicUsageEnvironment -I${CONTRIB_DIR}/include/UsageEnvironment"
+   ])
+@@ -1749,7 +1749,7 @@ You can get an updated one from http://w
+       AC_MSG_ERROR([Update live555 or pass --disable-live555 to disable RTSP input support.])
+     ])
+   ], [
+-    other_libs="-lgroupsock -lBasicUsageEnvironment -lUsageEnvironment"
++    other_libs="-L${libdir}/live/groupsock -lgroupsock -L${libdir}/live/BasicUsageEnvironment -lBasicUsageEnvironment -L${libdir}/live/UsageEnvironment -lUsageEnvironment"
+     other_libs_pic="-lgroupsock_pic -lBasicUsageEnvironment_pic -lUsageEnvironment_pic"
+     AS_IF([test "${SYS}" = "mingw32"], [
+       # add ws2_32 for closesocket, select, recv
+@@ -1768,8 +1768,8 @@ You can get an updated one from http://w
+     ],[
+       AC_CHECK_LIB(liveMedia, main, [
+         VLC_ADD_PLUGIN([live555])
+-        VLC_ADD_LIBS([live555], [-lliveMedia ${other_libs}])
+-      ],[],[${other_libs}])],[${other_libs_pic}])
++        VLC_ADD_LIBS([live555], [-L${libdir}/live/liveMedia -lliveMedia ${other_libs}])
++      ],[],[-L${libdir}/live/liveMedia ${other_libs}])],[${other_libs_pic}])
+   ])
+   CPPFLAGS="${CPPFLAGS_save}"
+   AC_LANG_POP(C++)
