@@ -350,7 +350,7 @@ BuildRequires:	pkgconfig(libcddb)
 BuildConflicts:	pkgconfig(libcddb)
 %endif
 %if %{with_smb}
-BuildRequires:	pkgconfig(smbclient) >= 3.0.10
+BuildRequires:	pkgconfig(smbclient)
 %endif
 %if %{with_lame}
 BuildRequires:	lame-devel
