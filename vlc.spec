@@ -2,11 +2,11 @@
 %define pre		0
 %define rel 1
 %if %{pre}
-%define release		%mkrel -c %{pre} %{rel}
+%define release		0.%{pre}.%{rel}
 %elsif %{snapshot}
-%define release		%mkrel -c %{snapshot} %{rel}
+%define release		0.%{snapshot}.%{rel}
 %else
-%define release		%mkrel %{rel}
+%define release		%{rel}
 %endif
 
 %define libmajor	5
@@ -96,7 +96,7 @@
 
 %define libname		%mklibname %{name} %{libmajor}
 %define libnamecore	%mklibname vlccore %{coremajor}
-%define develname %mklibname -d %{name}
+%define devname %mklibname -d %{name}
 
 # without
 %{?_without_plf:	%{expand: %%global with_plf 0}}
@@ -246,8 +246,12 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	2.0.3
+Version:	2.0.5
 Release:	%{release}%{?extrarelsuffix}
+#gw the shared libraries are LGPL
+License:	GPLv2+ and LGPLv2+
+Group:		Video
+URL:		http://www.videolan.org/
 %if %{snapshot}
 Source0:	http://nightlies.videolan.org/build/source/%{fname}.tar.xz
 %else
@@ -258,19 +262,26 @@ Patch1:		vlc-2.0.1-automake-1.12.patch
 Patch19:	vlc-2.0.0-mdv2010.1-updated-pulse-version-is-ok.patch
 Patch20:	vlc-2.0.0-fix-default-font.patch
 Patch21:	vlc-2.0.0-live555-path.patch
-#gw the shared libraries are LGPL
-License:	GPLv2+ and LGPLv2+
-Group:		Video
-URL:		http://www.videolan.org/
-# might be useful too:
-Suggests:	vlc-plugin-theora
-%if %{with_pulse}
-# needed when using pulseaudio
-Suggests:	vlc-plugin-pulse
-%endif
-Provides:	vlc-plugin-dvb vlc-plugin-mad vlc-plugin-alsa
-Obsoletes:	vlc-plugin-dvb vlc-plugin-mad vlc-plugin-alsa
-Requires:	fonts-ttf-vera
+
+BuildRequires:	desktop-file-utils
+BuildRequires:	libtool
+BuildRequires:	gettext-devel
+BuildRequires:	pkgconfig(caca)
+BuildRequires:	pkgconfig(dirac)
+BuildRequires:	pkgconfig(dvdread)
+BuildRequires:	pkgconfig(freetype2)
+BuildRequires:	pkgconfig(glu)
+BuildRequires:	pkgconfig(gnome-vfs-2.0)
+BuildRequires:	pkgconfig(libavcodec)
+BuildRequires:	pkgconfig(libcdio)
+BuildRequires:	pkgconfig(libnotify)
+BuildRequires:	pkgconfig(libproxy-1.0)
+BuildRequires:	pkgconfig(librsvg-2.0)
+BuildRequires:	pkgconfig(portaudio-2.0)
+BuildRequires:	pkgconfig(xcb-util)
+BuildRequires:	pkgconfig(xcb-keysyms)
+BuildRequires:	pkgconfig(xpm)
+
 %if %{with_sysfs}
 BuildRequires:	sysfsutils-devel
 %endif
@@ -278,148 +289,116 @@ BuildRequires:	sysfsutils-devel
 BuildRequires:	libtar-devel
 %endif
 %if %{with_mod}
-BuildRequires:	libmodplug-devel >= 1:0.7
+BuildRequires:	pkgconfig(libmodplug)
 %endif
 %if %{with_gnutls}
-BuildRequires:	gnutls-devel >= 1.0.17
+BuildRequires:	pkgconfig(gnutls)
 %endif
-BuildRequires:	freetype2-devel
 %if %{with_fribidi}
-BuildRequires:	fribidi-devel
+BuildRequires:	pkgconfig(fribidi)
 %endif
 %if %{with_libv4l}
-BuildRequires:	libv4l-devel
+BuildRequires:	pkgconfig(libv4l2)
 %endif
 %if %{with_udev}
-BuildRequires:	udev-devel >= 142
+BuildRequires:	pkgconfig(udev)
 %endif
-Provides:	gvlc
-Obsoletes:	gvlc
-Provides:	gnome-vlc
-Obsoletes:	gnome-vlc
-Provides:	kvlc
-Obsoletes:	kvlc
 %if %{with_qt4}
-Buildrequires:	qt4-devel
+BuildRequires:	qt4-devel
 %endif
-BuildRequires:	libmesaglu-devel
 %if %{with_taglib}
-BuildRequires:	taglib-devel > 1.5
+BuildRequires:	pkgconfig(taglib)
 %endif
 %if %{with_mtp}
-BuildRequires:	libmtp-devel >= 1.0.0
+BuildRequires:	pkgconfig(libmtp)
 %endif
 %if %{with_mad}
-BuildRequires:	libid3tag-devel
-BuildRequires:	libmad-devel
+BuildRequires:	pkgconfig(id3tag)
+BuildRequires:	pkgconfig(mad)
 %endif
 %if %{with_ogg}
-Buildrequires:	libvorbis-devel
-Buildrequires:	libogg-devel
-Provides:	vlc-plugin-ogg
-Obsoletes:	vlc-plugin-ogg
-%endif
-BuildRequires:	xpm-devel
-BuildRequires:	xcb-util-devel
-%if %{mdvver} >= 201200
-BuildRequires:	xcb-util-keysyms-devel
+BuildRequires:	pkgconfig(ogg)
+BuildRequires:	pkgconfig(vorbis)
+%rename	vlc-plugin-ogg
 %endif
 %if %{with_xcb_randr}
-BuildRequires:	xcb-devel > 1.2
+BuildRequires:	pkgconfig(xcb)
 %endif
-BuildRequires:	libproxy-devel
 %if %{with_speex}
-Buildrequires:	pkgconfig(speex) >= 1.1.16
+BuildRequires:	pkgconfig(speex) >= 1.1.16
 %endif
 %if %{with_flac}
-Buildrequires:	libflac-devel
+BuildRequires:	pkgconfig(flac)
 %endif
 %if %{with_mkv}
-Buildrequires:	libmatroska-devel >= 1.0.0
+BuildRequires:	libmatroska-devel >= 1.0.0
 %endif
 %if %{with_dvdnav}
-Buildrequires:	libdvdnav-devel >= 0.1.9
-Provides:	vlc-plugin-dvdnav
-Obsoletes:	vlc-plugin-dvdnav
+BuildRequires:	pkgconfig(dvdnav)
+%rename	vlc-plugin-dvdnav
 %endif
 %if %{with_a52}
-Buildrequires:	liba52dec-devel
-Provides:	vlc-plugin-a52
-Obsoletes:	vlc-plugin-a52
+BuildRequires:	a52dec-devel
+%rename	vlc-plugin-a52
 %endif
 %if %{with_vcd}
-BuildRequires:	libvcd-devel >= 0.7.21
+BuildRequires:	pkgconfig(libvcdinfo)
 %endif
-BuildRequires:	libcdio-devel >= 0.72
 %if %{with_cddb}
-BuildRequires:	libcddb-devel >= 0.9.5
+BuildRequires:	pkgconfig(libcddb)
 %else
-BuildConflicts:	libcddb-devel
+BuildConflicts:	pkgconfig(libcddb)
 %endif
 %if %{with_smb}
-BuildRequires:	libsmbclient-devel >= 3.0.10
+BuildRequires:	pkgconfig(smbclient) >= 3.0.10
 %endif
-Buildrequires:	ffmpeg-devel
 %if %{with_lame}
-BuildRequires:	liblame-devel
+BuildRequires:	lame-devel
 %endif
 %if %{with_mpeg2dec}
-Buildrequires:	libmpeg2dec-devel >= 0.4.0
+BuildRequires:	pkgconfig(libmpeg2)
 %endif
 %if %{with_mpc}
 BuildRequires:	libmpcdec-devel
 %endif
 %if %{with_faad}
 BuildRequires:	libfaad2-devel >= 2.0
-Provides:	vlc-plugin-faad
-Obsoletes:	vlc-plugin-faad
+%rename	vlc-plugin-faad
 %endif
 %if %{with_faac}
 BuildRequires:	libfaac-devel
 %endif
 %if %{with_alsa}
-BuildRequires:	libalsa-devel >= 1.0.23
+BuildRequires:	pkgconfig(alsa)
 %endif
 %if %{with_pulse}
-BuildRequires:	pulseaudio-devel >= 0.9.10
+BuildRequires:	pkgconfig(libpulse)
 %endif
 %if %{with_jack}
-BuildRequires:	jackit-devel
-BuildRequires:	libsamplerate-devel
+BuildRequires:	pkgconfig(jack)
+BuildRequires:	pkgconfig(samplerate)
 %endif
-Provides:	vlc-plugin-slp
-Obsoletes:	vlc-plugin-slp
 %if %{with_bonjour}
-BuildRequires:	avahi-client-devel
+BuildRequires:	pkgconfig(avahi-client)
 %endif
 %if %{with_dvbpsi}
-BuildRequires:	libdvbpsi-devel >= 0.1.7
+BuildRequires:	pkgconfig(libdvbpsi)
 %endif
-BuildRequires:	autoconf2.5
-BuildRequires:	gettext-devel
-BuildRequires:	automake >= 1.10
-BuildRequires:	libtool
 %if %{with_dts}
-BuildRequires:	libdca-devel
+BuildRequires:	pkgconfig(libdts)
 %endif
 %if %{with_x264}
-BuildRequires:	x264-devel > 0.65.2245
+BuildRequires:	pkgconfig(x264)
 %endif
 %if %{with_xml}
-BuildRequires:	libxml2-devel >= 2.6
+BuildRequires:	pkgconfig(libxml-2.0)
 %endif
 %if %{with_live}
 BuildRequires:	live-devel > 2011.12.23
 %endif
 %if %{with_xvideo}
-BuildRequires:	libxv-devel
+BuildRequires:	pkgconfig(xv)
 %endif
-BuildRequires:	libnotify-devel
-BuildRequires:	gnome-vfs2-devel
-BuildRequires:	portaudio-devel
-BuildRequires:	dirac-devel
-BuildRequires:	librsvg-devel
-BuildRequires:	libcaca-devel
 %if %{with_kde}
 BuildRequires:	kdelibs4-core
 %endif
@@ -427,13 +406,23 @@ BuildRequires:	kdelibs4-core
 BuildRequires:	pkgconfig(libbluray) >= 0.2.1
 %endif
 
-BuildRequires:	desktop-file-utils
-Provides:	wxvlc
-Obsoletes:	wxvlc
-BuildRequires:	libdvdread-devel
+%rename	gvlc
+%rename	gnome-vlc
+%rename	kvlc
+%rename	vlc-plugin-alsa
+%rename	vlc-plugin-dvb
+%rename	vlc-plugin-mad
+%rename	vlc-plugin-slp
+%rename	wxvlc
+# might be useful too:
+Suggests:	vlc-plugin-theora
+%if %{with_pulse}
+# needed when using pulseaudio
+Suggests:	vlc-plugin-pulse
+%endif
+Requires:	fonts-ttf-vera
+Requires(post,postun):	desktop-file-utils
 Conflicts:	vlc-plugin-common < %{version}-%{release}
-Requires(post):	desktop-file-utils
-Requires(postun): desktop-file-utils
 
 %description
 VideoLAN is an OpenSource streaming solution for every OS developed by
@@ -472,16 +461,15 @@ Shared core code for the VLC media player
 This package contains code that is shared by different modules of the
 VLC media player.
 
-%package -n %{develname}
+%package -n %{devname}
 Summary:	Development files for the VLC media player
 Group:		Development/C
 Requires:	%{libname} = %{version}
 Requires:	%{libnamecore} = %{version}
 Provides:	%{name}-devel = %{version}-%{release}
-Provides:	lib%{name}-devel = %{version}-%{release}
 Obsoletes:	%mklibname -d %{name} 0
 
-%description -n %{develname}
+%description -n %{devname}
 Development files for the VLC media player
 This package contains headers and a static library required to build plugins
 for the VLC media player, or standalone applications using features from VLC.
@@ -491,7 +479,7 @@ for the VLC media player, or standalone applications using features from VLC.
 Summary:	Add Teletext and Closed Caption support to VLC
 Group:		Video
 Requires:	%{name} = %{version}
-BuildRequires:	zvbi-devel
+BuildRequires:	pkgconfig(zvbi-0.2)
 
 %description plugin-zvbi
 This package adds support for Raw VBI, Teletext and Closed Caption based on
@@ -503,7 +491,7 @@ the ZVBI library to VLC.
 Summary:	Add subtitle and Karaoke text support to VLC
 Group:		Video
 Requires:	%{name} = %{version}
-BuildRequires:	libtiger-devel
+BuildRequires:	pkgconfig(tiger)
 
 %description plugin-kate
 This package adds support for subtitles and Karaoke text display based on
@@ -515,7 +503,7 @@ the libkate library to VLC.
 Summary:	Add subtitle support to VLC using libass
 Group:		Video
 Requires:	%{name} = %{version}
-BuildRequires:	libass-devel
+BuildRequires:	pkgconfig(libass)
 
 %description plugin-libass
 This package adds support for subtitles based on the libass library to VLC.
@@ -526,7 +514,7 @@ This package adds support for subtitles based on the libass library to VLC.
 Summary:	Add Lua scripting to vlc
 Group:		Video
 Requires:	%{name} = %{version}
-BuildRequires:	lua-devel >= 5.1
+BuildRequires:	pkgconfig(lua)
 
 %description plugin-lua
 This plugin adds lua scripting and provides a few example scripts as well.
@@ -537,7 +525,7 @@ This plugin adds lua scripting and provides a few example scripts as well.
 Summary:	Ncurses console-based plugin for the VLC media player
 Group:		Video
 Requires:	%{name} = %{version}
-Buildrequires:	ncurses-devel
+BuildRequires:	pkgconfig(ncurses)
 
 %description plugin-ncurses
 This plugin adds a ncurses interface to the VLC media player. To
@@ -549,9 +537,8 @@ activate it, use the `--intf ncurses' flag.
 Summary:	Lirc plugin for the VLC media player
 Group:		Video
 Requires:	%{name} = %{version}
-Obsoletes:	vlc-lirc
-Provides:	vlc-lirc
-Buildrequires:	liblirc-devel
+%rename	vlc-lirc
+BuildRequires:	pkgconfig(liblircclient0)
 
 %description plugin-lirc
 This plugin is an infrared lirc interface for the VLC media player. To
@@ -563,8 +550,7 @@ Summary:	Skinned GUI plugin for the VLC media player
 Group:		Video
 Requires:	%{name} = %{version}
 Provides:	vlc-gui
-Requires(post): desktop-file-utils
-Requires(postun): desktop-file-utils
+Requires(post,postun): desktop-file-utils
 
 %description -n svlc
 This plugin adds a skinned GUI interface to the VLC media player. To
@@ -577,9 +563,8 @@ activate it, run the `svlc' program.
 Summary:	ASCII art video plugin for the VLC media player
 Group:		Video
 Requires:	%{name} = %{version}
-Obsoletes:	vlc-aa
-Provides:	vlc-aa
-Buildrequires:	aalib-devel
+%rename	vlc-aa
+BuildRequires:	aalib-devel
 
 %description plugin-aa
 This is an ASCII art video output plugin for the VLC media playe. To
@@ -592,13 +577,12 @@ plugin from the preferences menu.
 Summary:	Simple DirectMedia Layer video plugin for the VLC media player
 Group:		Video
 Requires:	%{name} = %{version}
-Obsoletes:	vlc-sdl
-Provides:	vlc-sdl
+%rename	vlc-sdl
 %if %{with_sdl_image}
-Buildrequires:	SDL_image-devel >= 1.2.10
+BuildRequires:	pkgconfig(SDL_image)
 %endif
-BuildRequires:	SDL-devel >= 1.2.10
-Buildrequires:	nas-devel
+BuildRequires:	pkgconfig(sdl)
+BuildRequires:	nas-devel
 
 %description plugin-sdl
 This plugin adds support for the Simple DirectMedia Layer library to
@@ -612,7 +596,7 @@ from the preferences menu.
 Summary:	Shoutcast and Icecast connector
 Group:		Sound
 Requires:	%{name} = %{version}
-Buildrequires:	libshout-devel >= 2.1
+BuildRequires:	pkgconfig(shout)
 
 %description plugin-shout
 This plugin adds support for Icecast and Shoutcast servers.
@@ -627,15 +611,13 @@ Requires:	%{name} = %{version}
 This plugin adds support for OpenGL video output to
 the VLC media player.
 
-
-#
 # visualization plugins
 
 %if %{with_xosd}
 %package plugin-xosd
 Summary:	X On-Screen Display plugin for the VLC media player
 Group:		Video
-Buildrequires:	libxosd-devel >= 2
+BuildRequires:	xosd-devel >= 2
 Requires:	%{name} = %{version}
 
 %description plugin-xosd
@@ -659,7 +641,7 @@ This is a visualization plugin for VLC media player based on the Goom library.
 %package plugin-projectm
 Summary:	Visualization plugin for the VLC media player
 Group:		Video
-BuildRequires:	libprojectm-devel
+BuildRequires:	pkgconfig(libprojectM)
 Requires:	%{name} = %{version}
 
 %description plugin-projectm
@@ -671,7 +653,7 @@ This is a visualization plugin for VLC media player based on projectm.
 Summary:	Theora video codec for the VLC media player
 Group:		Video
 Requires:	%{name} = %{version}
-Buildrequires:	libtheora-devel
+BuildRequires:	pkgconfig(theora)
 
 %description plugin-theora
 These plugin adds support for the Ogg Theora video format to the VLC
@@ -683,7 +665,7 @@ media player. They are autodetected.
 Summary:	MP2 encoder plugin for VLC
 Group:		Sound
 Requires:	%{name} = %{version}
-BuildRequires:	libtwolame-devel
+BuildRequires:	pkgconfig(twolame)
 
 %description plugin-twolame
 These plugins add support for the Twolame MPEG Audio Layer 2 encoder
@@ -695,7 +677,7 @@ to the VLC media player. They are autodetected.
 Summary:	Add MIDI playback support to VLC based on Fluidsynth
 Group:		Sound
 Requires:	%{name} = %{version}
-BuildRequires:	libfluidsynth-devel
+BuildRequires:	pkgconfig(fluidsynth)
 
 %description plugin-fluidsynth
 This plugin adds support for MIDI playback to VLC based on the Fluidsynth
@@ -719,7 +701,7 @@ GME library.
 Summary:	Dirac plugin for VLC based on Schroedinger
 Group:		Video
 Requires:	%{name} = %{version}
-BuildRequires:	libschroedinger-devel >= 1.0.10
+BuildRequires:	pkgconfig(schroedinger-1.0)
 
 %description plugin-schroedinger
 These plugins add support for the Dirac video format based on Schroedinger.
@@ -749,10 +731,10 @@ VLC media player.
 Summary:	DV codec plugin for the VLC media player
 Group:		Video
 Requires:	%{name} = %{version}
-Buildrequires:	libdv-devel
-BuildRequires:	libraw1394-devel >= 2.0.1
-BuildRequires:	libdc1394-devel >= 2.1.0
-BuildRequires:	libavc1394-devel >= 0.5.3
+BuildRequires:	pkgconfig(libavc1394)
+BuildRequires:	pkgconfig(libdc1394-2)
+BuildRequires:	pkgconfig(libdv)
+BuildRequires:	pkgconfig(libraw1394)
 
 %description plugin-dv
 This plugin adds support for the DV video format to the VLC media player.
@@ -777,15 +759,13 @@ Requires:	%{name} = %{version}
 This plugin adds support for Musepack audio playback based on libmpcdec
 to the VLC media player.
 
-#
 # audio plugins
 %if %{with_pulse}
 %package plugin-pulse
 Summary:	PulseAudio plugin for the VLC media player
 Group:		Video
 Requires:	%{name} = %{version}
-Obsoletes:	vlc-pulse
-Provides:	vlc-pulse
+%rename	vlc-pulse
 
 %description plugin-pulse
 This plugin adds support for the PulseAudio Sound Daemon to the VLC
@@ -797,8 +777,7 @@ media player. To activate it, use the `--aout pulse' flag or select the
 Summary:	Jack audio plugin for the VLC media player
 Group:		Video
 Requires:	%{name} = %{version}
-Obsoletes:	vlc-jack
-Provides:	vlc-jack
+%rename	vlc-jack
 
 %description plugin-jack
 This plugin adds support for the Jack Audio Connection Kit to the VLC
@@ -819,7 +798,7 @@ the VLC media player.
 Summary:	UPNP service discovery plugin for the VLC media player
 Group:		Video
 Requires:	%{name} = %{version}
-BuildRequires:	libupnp-devel
+BuildRequires:	pkgconfig(libupnp)
 
 %description plugin-upnp
 This plugin adds support for UPNP service discovery to
@@ -1018,7 +997,6 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/speex"
 %make
 
 %install
-%__rm -rf %{buildroot}
 %__mkdir_p %{buildroot}%{_libdir}
 %makeinstall_std transform=""
 find %{buildroot}%{_libdir}/vlc -name \*.la -exec %__rm -f {} \;
@@ -1059,9 +1037,6 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %__install -m 644 %{pngdir}/16x16/vlc.png %{buildroot}/%{_miconsdir}/vlc.png
 %__install -m 644 %{pngdir}/32x32/vlc.png %{buildroot}/%{_iconsdir}/vlc.png
 %__install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
-
-%clean
-%__rm -fr %{buildroot}
 
 %files -f %{name}.lang
 %doc NEWS README COPYING AUTHORS THANKS
@@ -1466,7 +1441,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %files -n %{libnamecore}
 %{_libdir}/libvlccore.so.%{coremajor}*
 
-%files -n %{develname}
+%files -n %{devname}
 %doc README doc/release-howto.txt doc/skins
 %dir %{_includedir}/vlc
 %{_libdir}/libvlc.so
