@@ -258,6 +258,7 @@ Source0:	http://nightlies.videolan.org/build/source/%{fname}.tar.xz
 Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{fname}.tar.xz
 %endif
 Patch1:		vlc-2.0.1-automake-1.12.patch
+Patch2:		vlc-automake-1.13.patch
 # (cg) The version of PA on mdv 2010.1+updates is OK for VLC so it should be patched accordingly
 Patch19:	vlc-2.0.0-mdv2010.1-updated-pulse-version-is-ok.patch
 Patch20:	vlc-2.0.0-fix-default-font.patch
@@ -829,6 +830,7 @@ the VLC media player.
 %setup -q -n %{fname}
 %endif
 %patch1 -p1 -b .automake12~
+%patch2 -p1 -b .automake13~
 #gw if we want to regenerate libtool, we must remove the local versions of
 # the libtool m4 files, aclocal will replace them
 cd m4
@@ -852,7 +854,7 @@ libtoolize --install --force
 aclocal -I m4
 autoheader
 autoconf
-automake
+automake -a
 
 %build
 # add missing ebml include dir
