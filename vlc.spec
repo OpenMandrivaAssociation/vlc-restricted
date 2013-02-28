@@ -1,23 +1,23 @@
-%define snapshot	0
-%define pre		0
-%define rel 1
+%define snapshot 0
+%define pre 0
+%define rel 2
 %if %{pre}
-%define release		0.%{pre}.%{rel}
+%define release 0.%{pre}.%{rel}
 %elsif %{snapshot}
-%define release		0.%{snapshot}.%{rel}
+%define release 0.%{snapshot}.%{rel}
 %else
-%define release		%{rel}
+%define release %{rel}
 %endif
 
-%define libmajor	5
-%define coremajor	5
+%define libmajor 5
+%define coremajor 5
 
 %if %{snapshot}
-%define fname		%{name}-snapshot-%{snapshot}
+%define fname %{name}-snapshot-%{snapshot}
 %elsif %{pre}
-%define fname		%{name}-%{version}-%{pre}
+%define fname %{name}-%{version}-%{pre}
 %else
-%define fname		%{name}-%{version}
+%define fname %{name}-%{version}
 %endif
 
 %define with_plf 0
@@ -94,8 +94,8 @@
 %define with_bluray 1
 
 
-%define libname		%mklibname %{name} %{libmajor}
-%define libnamecore	%mklibname vlccore %{coremajor}
+%define libname %mklibname %{name} %{libmajor}
+%define libnamecore %mklibname vlccore %{coremajor}
 %define devname %mklibname -d %{name}
 
 # without
