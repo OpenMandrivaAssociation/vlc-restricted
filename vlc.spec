@@ -259,6 +259,7 @@ Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{fname}.t
 %endif
 Patch1:		vlc-2.0.1-automake-1.12.patch
 Patch2:		vlc-automake-1.13.patch
+Patch3:		vlc-2.0.5-samba4.patch
 # (cg) The version of PA on mdv 2010.1+updates is OK for VLC so it should be patched accordingly
 Patch19:	vlc-2.0.0-mdv2010.1-updated-pulse-version-is-ok.patch
 Patch20:	vlc-2.0.0-fix-default-font.patch
@@ -831,6 +832,7 @@ the VLC media player.
 %endif
 %patch1 -p1 -b .automake12~
 %patch2 -p1 -b .automake13~
+%patch3 -p1 -b .samba4~
 #gw if we want to regenerate libtool, we must remove the local versions of
 # the libtool m4 files, aclocal will replace them
 cd m4
@@ -861,6 +863,8 @@ automake -a
 export CPPFLAGS="$CPPFLAGS -I/usr/include/ebml"
 #gw the speex headers have moved
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/speex"
+# locate libsmbclient.h
+export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 %configure2_5x --enable-pvr --disable-dependency-tracking \
   --disable-sse \
 %if %{with_bonjour}
