@@ -1,6 +1,6 @@
 %define snapshot 0
 %define pre 0
-%define rel 3
+%define rel 1
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %elsif %{snapshot}
@@ -246,7 +246,7 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	2.0.5
+Version:	2.0.6
 Release:	%{release}%{?extrarelsuffix}
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
@@ -260,8 +260,6 @@ Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{fname}.t
 Patch1:		vlc-2.0.1-automake-1.12.patch
 Patch2:		vlc-automake-1.13.patch
 Patch3:		vlc-2.0.5-samba4.patch
-# (cg) The version of PA on mdv 2010.1+updates is OK for VLC so it should be patched accordingly
-Patch19:	vlc-2.0.0-mdv2010.1-updated-pulse-version-is-ok.patch
 Patch20:	vlc-2.0.0-fix-default-font.patch
 Patch21:	vlc-2.0.0-live555-path.patch
 
