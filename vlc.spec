@@ -258,7 +258,6 @@ Source0:	http://nightlies.videolan.org/build/source/%{fname}.tar.xz
 Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{fname}.tar.xz
 %endif
 Patch1:		vlc-2.0.1-automake-1.12.patch
-Patch2:		vlc-automake-1.13.patch
 Patch3:		vlc-2.0.5-samba4.patch
 Patch20:	vlc-2.0.0-fix-default-font.patch
 Patch21:	vlc-2.0.0-live555-path.patch
@@ -829,7 +828,6 @@ the VLC media player.
 %setup -q -n %{fname}
 %endif
 %patch1 -p1 -b .automake12~
-%patch2 -p1 -b .automake13~
 %patch3 -p1 -b .samba4~
 #gw if we want to regenerate libtool, we must remove the local versions of
 # the libtool m4 files, aclocal will replace them
