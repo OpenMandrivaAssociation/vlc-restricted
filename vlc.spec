@@ -1,6 +1,6 @@
 %define snapshot 0
 %define pre 0
-%define rel 1
+%define rel 2
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %elsif %{snapshot}
@@ -276,6 +276,7 @@ BuildRequires:	pkgconfig(libcdio)
 BuildRequires:	pkgconfig(libnotify)
 BuildRequires:	pkgconfig(libproxy-1.0)
 BuildRequires:	pkgconfig(librsvg-2.0)
+BuildRequires:	pkgconfig(opus)
 BuildRequires:	pkgconfig(portaudio-2.0)
 BuildRequires:	pkgconfig(xcb-util)
 BuildRequires:	pkgconfig(xcb-keysyms)
@@ -724,6 +725,15 @@ Requires:	%{name} = %{version}
 %description plugin-flac
 These plugins add support for the FLAC compressed audio format to the
 VLC media player.
+
+%package plugin-opus
+Summary:	Opus codec plugin for the VLC media player
+Group:		Sound
+Requires:	%name = %version
+
+%description plugin-opus
+These plugins add support for the Opus codec to the VLC media
+player. They are autodetected.
 
 %if %{with_dv}
 %package plugin-dv
@@ -1592,6 +1602,9 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %doc README
 %{_libdir}/vlc/plugins/demux/libflacsys_plugin.so
 %{_libdir}/vlc/plugins/codec/libflac_plugin.so*
+
+%files plugin-opus
+%{_libdir}/vlc/plugins/codec/libopus_plugin.so*
 
 %if %{with_dv}
 %files plugin-dv
