@@ -246,7 +246,7 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	2.0.6
+Version:	2.0.7
 Release:	%{release}%{?extrarelsuffix}
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
