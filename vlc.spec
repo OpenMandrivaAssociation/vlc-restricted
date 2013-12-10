@@ -246,7 +246,7 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	2.1.1
+Version:	2.1.2
 Release:	%{release}%{?extrarelsuffix}
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
@@ -274,6 +274,7 @@ BuildRequires:	pkgconfig(libcdio)
 BuildRequires:	pkgconfig(libnotify)
 BuildRequires:	pkgconfig(libproxy-1.0)
 BuildRequires:	pkgconfig(librsvg-2.0)
+BuildRequires:	pkgconfig(libchromaprint)
 BuildRequires:	pkgconfig(opus)
 BuildRequires:	pkgconfig(portaudio-2.0)
 BuildRequires:	pkgconfig(xcb-util)
@@ -864,8 +865,11 @@ export CPPFLAGS="$CPPFLAGS -I/usr/include/ebml"
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/speex"
 # locate libsmbclient.h
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
-%configure2_5x --enable-pvr --disable-dependency-tracking \
-  --disable-sse \
+%configure2_5x --disable-dependency-tracking \
+%ifarch %{ix86}
+	--disable-sse \
+%endif
+	--disable-sid \
 %if %{with_bonjour}
 	--enable-bonjour \
 %else
@@ -1269,6 +1273,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/misc/libstats_plugin.so
 %{_libdir}/vlc/plugins/misc/libvod_rtsp_plugin.so*
 %{_libdir}/vlc/plugins/misc/libxdg_screensaver_plugin.so*
+%{_libdir}/vlc/plugins/misc/libfingerprinter_plugin.so
 %if %{with_xml}
 %{_libdir}/vlc/plugins/misc/libxml_plugin.so*
 %endif
@@ -1313,6 +1318,8 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %endif
 %{_libdir}/vlc/plugins/services_discovery/libxcb_apps_plugin.so
 
+%optional %{_libdir}/vlc/plugins/sse2
+
 %dir %{_libdir}/vlc/plugins/stream_filter/
 %{_libdir}/vlc/plugins/stream_filter/libdecomp_plugin.so
 %{_libdir}/vlc/plugins/stream_filter/libdash_plugin.so
@@ -1339,6 +1346,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/stream_out/libstream_out_smem_plugin.so*
 %{_libdir}/vlc/plugins/stream_out/libstream_out_standard_plugin.so*
 %{_libdir}/vlc/plugins/stream_out/libstream_out_transcode_plugin.so*
+%{_libdir}/vlc/plugins/stream_out/libstream_out_chromaprint_plugin.so
 %dir %{_libdir}/vlc/plugins/text_renderer
 %{_libdir}/vlc/plugins/text_renderer/libfreetype_plugin.so*
 %{_libdir}/vlc/plugins/text_renderer/libsvg_plugin.so
