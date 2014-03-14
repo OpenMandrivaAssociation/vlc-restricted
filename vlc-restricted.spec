@@ -20,7 +20,7 @@
 %define fname %{name}-%{version}
 %endif
 
-%define with_plf 0
+%define with_plf 1
 
 %define with_fribidi 1
 %define with_xml 1
