@@ -30,8 +30,8 @@
 %define with_qt4 1
 %define with_qt5 0
 %else
-%define with_qt4 0
-%define with_qt5 1
+%define with_qt4 1
+%define with_qt5 0
 %endif
 %define with_svlc 1
 %define with_udev 1
