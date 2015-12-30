@@ -1,6 +1,9 @@
+%define _disable_lto 1
+%define _disable_rebuild_configure 1
+
 %define snapshot 0
 %define pre 0
-%define rel 5
+%define rel 7
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %elsif %{snapshot}
@@ -26,12 +29,12 @@
 %define with_xml 1
 %define with_ncurses 1
 %define with_lirc 1
-%ifarch %{ix86} %{arm}
+%ifarch %{ix86} x86_64 %{arm}
 %define with_qt4 1
 %define with_qt5 0
 %else
-%define with_qt4 1
-%define with_qt5 0
+%define with_qt4 0
+%define with_qt5 1
 %endif
 %define with_svlc 1
 %define with_udev 1
@@ -74,6 +77,7 @@
 %define with_lame 0
 %define with_dts 0
 %define with_x264 0
+%define with_x265 0
 %define with_live 1
 %define with_libv4l 1
 %define with_sysfs 1
@@ -134,6 +138,7 @@
 %{?_without_faad:	%{expand: %%global with_faad 0}}
 %{?_without_faac:	%{expand: %%global with_faac 0}}
 %{?_without_x264:	%{expand: %%global with_x264 0}}
+%{?_without_x265:	%{expand: %%global with_x265 0}} 
 %{?_without_lame:	%{expand: %%global with_lame 0}}
 %{?_without_dts:	%{expand: %%global with_dts 0}}
 %{?_without_live:	%{expand: %%global with_live 0}}
@@ -193,6 +198,7 @@
 %{?_with_faad:		%{expand: %%global with_faad 1}}
 %{?_with_faac:		%{expand: %%global with_faac 1}}
 %{?_with_x264:		%{expand: %%global with_x264 1}}
+%{?_with_x265:		%{expand: %%global with_x265 1}}
 %{?_with_lame:		%{expand: %%global with_lame 1}}
 %{?_with_dts:		%{expand: %%global with_dts 1}}
 %{?_with_live:		%{expand: %%global with_live 1}}
@@ -244,6 +250,7 @@
 %global with_lame 1
 %global with_dts 1
 %global with_x264 1
+%global with_x265 1
 %endif
 
 %define git_url git://git.videolan.org/vlc.git
@@ -410,6 +417,9 @@ BuildRequires:	pkgconfig(libdts)
 %endif
 %if %{with_x264}
 BuildRequires:	pkgconfig(x264)
+%endif
+%if %{with_x265}
+BuildRequires:  pkgconfig(x265)
 %endif
 %if %{with_xml}
 BuildRequires:	pkgconfig(libxml-2.0)
@@ -993,6 +1003,11 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 %else
 --disable-x264 \
 %endif
+%if %{with_x265}
+--enable-x265 \
+%else
+--disable-x265 \
+%endif
 %if %{with_twolame}
 --enable-twolame \
 %endif
@@ -1194,6 +1209,9 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/codec/libsubsdec_plugin.so*
 %if %{with_x264}
 %{_libdir}/vlc/plugins/codec/libx264_plugin.so*
+%endif
+%if %{with_x265}
+%{_libdir}/vlc/plugins/codec/libx265_plugin.so*
 %endif
 %{_libdir}/vlc/plugins/codec/libspudec_plugin.so*
 %{_libdir}/vlc/plugins/codec/libdvbsub_plugin.so*
