@@ -1,9 +1,6 @@
-%define _disable_lto 1
-%define _disable_rebuild_configure 1
-
 %define snapshot 0
 %define pre 0
-%define rel 7
+%define rel 3
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %elsif %{snapshot}
@@ -30,8 +27,8 @@
 %define with_ncurses 1
 %define with_lirc 1
 %ifarch %{ix86} x86_64 %{arm}
-%define with_qt4 1
-%define with_qt5 0
+%define with_qt4 0
+%define with_qt5 1
 %else
 %define with_qt4 0
 %define with_qt5 1
@@ -138,7 +135,7 @@
 %{?_without_faad:	%{expand: %%global with_faad 0}}
 %{?_without_faac:	%{expand: %%global with_faac 0}}
 %{?_without_x264:	%{expand: %%global with_x264 0}}
-%{?_without_x265:	%{expand: %%global with_x265 0}} 
+%{?_without_x265:	%{expand: %%global with_x265 0}}
 %{?_without_lame:	%{expand: %%global with_lame 0}}
 %{?_without_dts:	%{expand: %%global with_dts 0}}
 %{?_without_live:	%{expand: %%global with_live 0}}
@@ -257,7 +254,7 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	2.2.1
+Version:	2.2.2
 Release:	%{release}%{?extrarelsuffix}
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
@@ -420,7 +417,7 @@ BuildRequires:	pkgconfig(libdts)
 BuildRequires:	pkgconfig(x264)
 %endif
 %if %{with_x265}
-BuildRequires:  pkgconfig(x265)
+BuildRequires:	pkgconfig(x265)
 %endif
 %if %{with_xml}
 BuildRequires:	pkgconfig(libxml-2.0)
@@ -871,6 +868,9 @@ pushd m4
 rm -fv argz.m4 libtool.m4 ltdl.m4 ltoptions.m4 ltsugar.m4 ltversion.m4 lt~obsolete.m4
 popd
 
+# Our Qt is patched with the bit below -- no point in erroring out
+sed -i -e 's/.*ERROR.*I78ef29975181ee22429c9bd4b11d96d9e68b7a9c.*/AC_MSG_WARN([OMV Qt is good])/' configure.ac
+
 %if %{snapshot}
 ./bootstrap
 %endif
@@ -886,6 +886,7 @@ export CPPFLAGS="$CPPFLAGS -I/usr/include/ebml"
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/speex"
 # locate libsmbclient.h
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
+
 %configure \
 --disable-dependency-tracking \
 %ifarch %{ix86}
