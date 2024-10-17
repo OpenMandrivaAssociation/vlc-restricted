@@ -259,7 +259,7 @@ Release:	%{release}%{?extrarelsuffix}
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
-URL:		http://www.videolan.org/
+URL:		https://www.videolan.org/
 %if %{snapshot}
 Source0:	http://nightlies.videolan.org/build/source/%{fname}.tar.xz
 %else
