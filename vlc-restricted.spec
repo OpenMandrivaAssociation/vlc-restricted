@@ -275,6 +275,10 @@ Patch24:	vlc-ffmpeg3.patch
 # Debian patch for compiling with ffmpeg 2.9+
 Patch25:	ffmpeg_2.9.patch
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
 BuildRequires:	desktop-file-utils
 BuildRequires:	libtool
 BuildRequires:	yasm
